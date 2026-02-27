@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RepoRecruit — Web3 Talent</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080a0f;--s1:#0e1117;--s2:#151921;--s3:#1c2230;
+  --b1:#1a2035;--b2:#243050;
+  --a:#00e5a0;--a2:#3d7fff;--a3:#f59e0b;--warn:#ff6b35;--pur:#a78bfa;
+  --t:#e2e8f4;--t2:#7a8ba8;--t3:#3d4f6b;
+}
+html,body{height:100%;background:var(--bg);color:var(--t);font-family:'JetBrains Mono',monospace;overflow-x:hidden}
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,229,160,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.025) 1px,transparent 1px);
+  background-size:48px 48px}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.1;pointer-events:none}
+.orb1{width:500px;height:500px;background:var(--a);top:-150px;right:-150px;animation:drift 18s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:var(--a2);bottom:-100px;left:-100px;animation:drift 22s ease-in-out infinite reverse}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,15px)}}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* HEADER */
+header{border-bottom:1px solid var(--b1);padding:14px 0;position:sticky;top:0;background:rgba(8,10,15,.95);backdrop-filter:blur(16px);z-index:100}
+.hinner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px}
+.hex{width:30px;height:30px;background:var(--a);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+.logo-text{font-family:'DM Serif Display',serif;font-size:20px}.logo-text span{color:var(--a)}
+.logo-sub{font-size:9px;color:var(--t3);letter-spacing:2px;text-transform:uppercase}
+.hright{display:flex;align-items:center;gap:10px}
+.saved-btn{display:flex;align-items:center;gap:6px;background:var(--s1);border:1px solid var(--b2);border-radius:6px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 14px;transition:all .2s}
+.saved-btn:hover{border-color:var(--a3);color:var(--a3)}
+.sc{background:var(--a3);color:#000;border-radius:10px;font-size:9px;font-weight:700;padding:1px 6px;margin-left:2px}
+.pill{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2);background:var(--s1);border:1px solid var(--b1);padding:5px 12px;border-radius:20px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--a);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* HERO */
+.hero{padding:52px 0 36px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--a);margin-bottom:18px;border:1px solid rgba(0,229,160,.2);padding:5px 14px;border-radius:20px;background:rgba(0,229,160,.05)}
+.htitle{font-family:'DM Serif Display',serif;font-size:clamp(32px,5vw,54px);line-height:1.05;margin-bottom:14px}
+.htitle em{font-style:italic;color:var(--a)}
+.htitle .dim{color:var(--t2)}
+.hsub{font-size:13px;color:var(--t2);line-height:1.8;max-width:500px;margin:0 auto 36px}
+
+/* MODE TOGGLE */
+.mode-toggle{display:flex;background:var(--s1);border:1px solid var(--b1);border-radius:8px;padding:4px;max-width:360px;margin:0 auto 28px}
+.mbtn{flex:1;background:transparent;border:none;border-radius:5px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;padding:9px 16px;text-transform:uppercase;transition:all .2s}
+.mbtn.on{background:var(--s3);color:var(--t);border:1px solid var(--b2)}
+
+/* SEARCH CARD */
+.card{background:var(--s1);border:1px solid var(--b2);border-radius:10px;padding:26px;max-width:720px;margin:0 auto 36px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--a),var(--a2))}
+.flabel{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.irow{display:flex;gap:10px}
+input[type=text],input[type=password],textarea{background:var(--bg);border:1px solid var(--b2);border-radius:5px;color:var(--t);font-family:'JetBrains Mono',monospace;font-size:13px;padding:11px 14px;outline:none;transition:all .2s;width:100%}
+input:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(0,229,160,.07)}
+input::placeholder,textarea::placeholder{color:var(--t3)}
+.sbtn{background:var(--a);border:none;border-radius:5px;color:#050709;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:11px 22px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.sbtn:hover:not(:disabled){background:#00ffb3;box-shadow:0 0 18px rgba(0,229,160,.3);transform:translateY(-1px)}
+.sbtn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.abtn{background:linear-gradient(135deg,var(--a2),var(--pur));border:none;border-radius:5px;color:#fff;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:11px 22px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.abtn:hover{opacity:.85;transform:translateY(-1px)}
+.hint{margin-top:9px;font-size:11px;color:var(--t3)}.hint span{color:var(--t2)}
+.trow{margin-top:14px;padding-top:14px;border-top:1px solid var(--b1)}
+.tnote{margin-top:6px;font-size:10px;color:var(--t3);line-height:1.7}
+.tnote a{color:var(--a2)}
+
+/* AI suggestions */
+.ai-sugg{margin-top:20px}
+.ai-sugg-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px}
+.scard{background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:12px 14px;cursor:pointer;transition:all .2s}
+.scard:hover{border-color:var(--a2);transform:translateY(-1px)}
+.srepo{font-size:11px;color:var(--a2);margin-bottom:4px}
+.sreason{font-size:10px;color:var(--t3);line-height:1.5}
+.stags{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}
+.presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.preset{background:var(--s2);border:1px solid var(--b1);border-radius:20px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 12px;transition:all .2s}
+.preset:hover{border-color:var(--a2);color:var(--a2)}
+
+/* ERROR / LOADER */
+.erbox{background:rgba(255,107,53,.07);border:1px solid rgba(255,107,53,.25);border-radius:6px;padding:14px 18px;font-size:12px;color:var(--warn);margin-bottom:18px;max-width:720px;margin-left:auto;margin-right:auto}
+.loader{text-align:center;padding:64px 0}
+.lbar{width:220px;height:2px;background:var(--b2);border-radius:2px;margin:0 auto 18px;overflow:hidden;position:relative}
+.lfill{position:absolute;top:0;left:0;width:70px;height:100%;background:linear-gradient(90deg,var(--a),var(--a2));animation:lslide 1.2s ease-in-out infinite}
+@keyframes lslide{0%{transform:translateX(-70px)}100%{transform:translateX(220px)}}
+.ltext{font-size:12px;color:var(--t2)}.lsub{font-size:10px;color:var(--t3);margin-top:5px}
+
+/* REPO BANNER */
+.rbanner{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:var(--s1);border:1px solid var(--b2);border-radius:8px;padding:14px 18px;margin-bottom:18px}
+.rtitle{font-family:'DM Serif Display',serif;font-size:19px}
+.rdesc{font-size:10px;color:var(--t3);max-width:360px;margin-top:3px}
+.rstat{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t2)}
+
+/* STATS */
+.sbar{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:11px;margin-bottom:22px}
+.stat{background:var(--s1);border:1px solid var(--b1);border-radius:8px;padding:13px 16px;transition:border-color .2s}
+.stat:hover{border-color:var(--b2)}
+.snum{font-family:'DM Serif Display',serif;font-size:28px;line-height:1;margin-bottom:4px}
+.slabel{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3)}
+
+/* RESULTS HEADER */
+.rheader{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex-wrap:wrap;gap:10px}
+.rmeta{display:flex;align-items:center;gap:10px}
+.rtitle2{font-family:'DM Serif Display',serif;font-size:21px}
+.cpill{background:var(--s2);border:1px solid var(--b2);border-radius:20px;font-size:10px;color:var(--a);padding:3px 10px}
+.bgroup{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.obtn{background:transparent;border:1px solid var(--b2);border-radius:5px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:7px 13px;text-transform:uppercase;transition:all .2s}
+.obtn:hover{border-color:var(--a);color:var(--a)}
+.sfilter{background:var(--s1);border:1px solid var(--b1);border-radius:5px;color:var(--t);font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;outline:none;width:190px}
+.sfilter:focus{border-color:var(--a2)}
+.sfilter::placeholder{color:var(--t3)}
+
+/* FILTER BAR */
+.fbar{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.fbtn{background:var(--s1);border:1px solid var(--b1);border-radius:20px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 13px;transition:all .2s}
+.fbtn.on{border-color:var(--a);color:var(--a);background:rgba(0,229,160,.06)}
+.fsep{width:1px;height:18px;background:var(--b1);margin:0 3px}
+.lfbtn{background:var(--s2);border:1px solid var(--b1);border-radius:4px;color:var(--t3);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.5px;padding:4px 10px;text-transform:uppercase;transition:all .2s}
+.lfbtn.on{border-color:var(--pur);color:var(--pur);background:rgba(167,139,250,.1)}
+
+/* TABLE */
+.twrap{overflow-x:auto;border:1px solid var(--b1);border-radius:10px;margin-bottom:56px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:var(--s2);border-bottom:1px solid var(--b2)}
+th{text-align:left;padding:11px 13px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--b1);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+td{padding:12px 13px;vertical-align:middle}
+.avcell{display:flex;align-items:center;gap:10px;min-width:155px}
+.av{width:34px;height:34px;border-radius:50%;border:1px solid var(--b2);object-fit:cover;flex-shrink:0;cursor:pointer;transition:transform .2s}
+.av:hover{transform:scale(1.1)}
+.ntext{font-weight:500;cursor:pointer}.ntext:hover{color:var(--a)}
+.stext{font-size:10px;color:var(--t3);margin-top:2px}
+.hlink{color:var(--a2);text-decoration:none}.hlink:hover{opacity:.7}
+.elink{color:var(--a);text-decoration:none;font-size:11px}.elink:hover{opacity:.7}
+.noval{color:var(--t3);font-size:11px}
+.cbadge{background:var(--s2);border:1px solid var(--b1);border-radius:4px;color:var(--t2);font-size:11px;padding:3px 8px}
+.bdgcell{display:flex;flex-wrap:wrap;gap:4px;min-width:90px}
+.bdg{border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;padding:3px 7px;text-transform:uppercase;white-space:nowrap}
+.bdg-eth{background:rgba(98,126,234,.15);border:1px solid rgba(98,126,234,.3);color:#8fa8f5}
+.bdg-sol{background:rgba(153,69,255,.15);border:1px solid rgba(153,69,255,.3);color:#c084fc}
+.bdg-rust{background:rgba(206,66,43,.15);border:1px solid rgba(206,66,43,.3);color:#f87171}
+.bdg-cos{background:rgba(100,149,237,.15);border:1px solid rgba(100,149,237,.3);color:#93c5fd}
+.bdg-btc{background:rgba(247,147,26,.15);border:1px solid rgba(247,147,26,.3);color:#fbbf24}
+.bdg-near{background:rgba(0,236,151,.15);border:1px solid rgba(0,236,151,.3);color:#34d399}
+.bdg-dot{background:rgba(230,0,122,.15);border:1px solid rgba(230,0,122,.3);color:#f472b6}
+.bdg-avax{background:rgba(232,65,66,.15);border:1px solid rgba(232,65,66,.3);color:#fca5a5}
+.bdg-lang{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:#a78bfa}
+.bdg-defi{background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);color:var(--a)}
+.score-wrap{min-width:75px}
+.score-row{display:flex;align-items:center;gap:7px}
+.score-n{font-family:'DM Serif Display',serif;font-size:18px;min-width:26px}
+.score-bar{flex:1;height:3px;background:var(--b2);border-radius:2px;overflow:hidden;min-width:36px}
+.score-fill{height:100%;border-radius:2px}
+.score-lbl{font-size:9px;color:var(--t3);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+.adot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+.ahot{background:var(--a);box-shadow:0 0 5px rgba(0,229,160,.5)}
+.awarm{background:var(--a3)}
+.acold{background:var(--t3)}
+.atext{font-size:10px;vertical-align:middle}
+.libtn{display:inline-flex;align-items:center;gap:4px;background:rgba(61,127,255,.08);border:1px solid rgba(61,127,255,.2);border-radius:4px;color:var(--a2);font-family:'JetBrains Mono',monospace;font-size:9px;padding:4px 9px;text-decoration:none;transition:all .2s;letter-spacing:.5px}
+.libtn:hover{background:rgba(61,127,255,.18)}
+.svbtn{background:transparent;border:1px solid var(--b1);border-radius:4px;color:var(--t3);cursor:pointer;font-size:13px;padding:4px 8px;transition:all .2s;line-height:1}
+.svbtn:hover{border-color:var(--a3);color:var(--a3)}
+.svbtn.on{border-color:var(--a3);color:var(--a3);background:rgba(245,158,11,.1)}
+
+/* OVERLAY / DRAWER */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;animation:fdin .2s ease}
+@keyframes fdin{from{opacity:0}to{opacity:1}}
+.drawer{background:var(--s1);border:1px solid var(--b2);border-radius:16px 16px 0 0;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;padding:26px;animation:sdup .3s ease}
+@keyframes sdup{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.dtitle{font-family:'DM Serif Display',serif;font-size:21px}
+.cbtn{background:var(--s2);border:1px solid var(--b1);border-radius:6px;color:var(--t2);cursor:pointer;font-size:16px;padding:4px 10px;transition:all .2s}
+.cbtn:hover{border-color:var(--warn);color:var(--warn)}
+.ptop{display:flex;align-items:flex-start;gap:18px;margin-bottom:22px}
+.pav{width:68px;height:68px;border-radius:50%;border:2px solid var(--b2)}
+.pname{font-family:'DM Serif Display',serif;font-size:24px;margin-bottom:3px}
+.phandle{color:var(--a2);font-size:13px;margin-bottom:7px}
+.pbio{font-size:12px;color:var(--t2);line-height:1.6;max-width:420px}
+.pmeta{display:flex;gap:12px;flex-wrap:wrap;margin-top:9px}
+.pmi{font-size:11px;color:var(--t3);display:flex;align-items:center;gap:4px}
+.psec{margin-bottom:20px}
+.psect{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:11px;border-bottom:1px solid var(--b1);padding-bottom:7px}
+.rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px}
+.rcard{background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:11px;transition:all .2s;text-decoration:none;display:block}
+.rcard:hover{border-color:var(--a2)}
+.rcard-name{color:var(--a2);font-size:11px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcard-desc{font-size:10px;color:var(--t3);line-height:1.5;height:28px;overflow:hidden}
+.rcard-meta{display:flex;gap:9px;margin-top:7px;font-size:10px;color:var(--t3)}
+.narea{width:100%;background:var(--bg);border:1px solid var(--b2);border-radius:5px;color:var(--t);font-family:'JetBrains Mono',monospace;font-size:12px;padding:12px;outline:none;resize:vertical;min-height:75px}
+.narea:focus{border-color:var(--a2)}
+.narea::placeholder{color:var(--t3)}
+.nsave{margin-top:7px;background:var(--a2);border:none;border-radius:5px;color:#fff;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;padding:8px 17px;text-transform:uppercase;transition:all .2s}
+.nsave:hover{opacity:.85}
+
+/* OUTREACH */
+.tone-row{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.tbtn{background:var(--s2);border:1px solid var(--b1);border-radius:4px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 13px;text-transform:uppercase;transition:all .2s}
+.tbtn.on{background:rgba(0,229,160,.1);border-color:var(--a);color:var(--a)}
+.genbtn{background:var(--a);border:none;border-radius:4px;color:#050709;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;padding:6px 16px;text-transform:uppercase;transition:all .2s}
+.genbtn:hover{background:#00ffb3}
+.omsg-wrap{position:relative}
+.omsg{width:100%;background:var(--bg);border:1px solid var(--b2);border-radius:5px;color:var(--t2);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.75;padding:14px;outline:none;resize:vertical;min-height:210px}
+.copybtn{position:absolute;top:9px;right:9px;background:var(--s3);border:1px solid var(--b2);border-radius:4px;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:5px 11px;text-transform:uppercase;transition:all .2s}
+.copybtn.done{background:var(--a);color:#050709;border-color:var(--a)}
+.onote{font-size:10px;color:var(--t3);margin-top:6px;line-height:1.6}
+
+/* SAVED PANEL */
+.spanel{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:11px}
+.svc{background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:13px;display:flex;gap:11px;align-items:flex-start}
+.svc-info{flex:1}
+.svc-name{font-weight:500;font-size:13px;margin-bottom:3px}
+.svc-handle{color:var(--a2);font-size:11px;margin-bottom:5px}
+.svc-note{font-size:10px;color:var(--t3);line-height:1.5}
+.unsave{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:15px;padding:0;transition:color .2s}
+.unsave:hover{color:var(--warn)}
+.empty{text-align:center;padding:40px 0;color:var(--t3);font-size:13px;line-height:2}
+
+footer{border-top:1px solid var(--b1);padding:22px 0;text-align:center;font-size:10px;color:var(--t3);line-height:2}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="app"></div>
+
+<script>
+// - Web3 Knowledge Base -
+const KB = {
+  "solidity developer":        { repos:["OpenZeppelin/openzeppelin-contracts","Uniswap/v3-core","aave/aave-v3-core","compound-finance/compound-protocol","curvefi/curve-contract","morpho-org/morpho-blue"], reason:"Core Solidity smart contract repos used by top DeFi protocols", tags:["Solidity","DeFi","EVM"] },
+  "rust blockchain engineer":  { repos:["solana-labs/solana","paritytech/substrate","near/nearcore","aptos-labs/aptos-core","MystenLabs/sui"], reason:"Leading Rust-based L1 blockchain infrastructure projects", tags:["Rust","L1","Infrastructure"] },
+  "defi protocol developer":   { repos:["Uniswap/v3-core","aave/aave-v3-core","makerdao/dss","balancer-labs/balancer-v2-monorepo","yearn/yearn-vaults"], reason:"Most forked and referenced DeFi protocol implementations", tags:["Solidity","DeFi","AMM"] },
+  "layer 2 engineer":          { repos:["ethereum-optimism/optimism","OffchainLabs/arbitrum","0xPolygon/polygon-edge","matter-labs/zksync-era","starkware-libs/cairo-lang"], reason:"Core L2 scaling repos across optimistic and zk rollup stacks", tags:["L2","Rollups","zkEVM"] },
+  "zk engineer":               { repos:["matter-labs/zksync-era","starkware-libs/cairo-lang","arkworks-rs/arkworks","succinctlabs/sp1","zcash/librustzcash"], reason:"Leading ZK proof systems, circuits, and zkVM projects", tags:["ZK","Cairo","Rust"] },
+  "ethereum core developer":   { repos:["ethereum/go-ethereum","sigp/lighthouse","prysmaticlabs/prysm","ethereum/consensus-specs","ethereum/py-evm"], reason:"Core Ethereum client and consensus layer implementations", tags:["Go","Python","Ethereum"] },
+  "nft developer":             { repos:["OpenZeppelin/openzeppelin-contracts","chiru-labs/ERC721A","thirdweb-dev/contracts","transmissions11/solmate"], reason:"ERC-721, ERC-1155 and token standard implementations", tags:["Solidity","NFT","ERC-721"] },
+  "cross-chain developer":     { repos:["axelarnetwork/axelar-core","wormhole-foundation/wormhole","connext/monorepo","LayerZero-Labs/LayerZero"], reason:"Top cross-chain messaging and bridge protocol codebases", tags:["Cross-chain","Interop","Bridges"] },
+  "web3 frontend developer":   { repos:["wevm/wagmi","rainbow-me/rainbowkit","ethers-io/ethers.js","wevm/viem","scaffold-eth/scaffold-eth-2"], reason:"Leading web3 frontend libraries and wallet tooling", tags:["TypeScript","React","wagmi"] },
+  "cosmos developer":          { repos:["cosmos/cosmos-sdk","cosmos/ibc-go","osmosis-labs/osmosis","celestiaorg/celestia-core"], reason:"Core Cosmos SDK and IBC protocol implementations", tags:["Go","Cosmos","IBC"] },
+  "security auditor":          { repos:["crytic/slither","trailofbits/manticore","OpenZeppelin/openzeppelin-contracts","foundry-rs/foundry"], reason:"Smart contract security tooling and audited reference implementations", tags:["Security","Auditing","Solidity"] },
+  "move developer":            { repos:["aptos-labs/aptos-core","MystenLabs/sui","move-language/move"], reason:"Move language blockchain ecosystems", tags:["Move","Aptos","Sui"] }
+};
+
+const PROTOS = [
+  { key:"eth",  label:"ETH",    cls:"bdg-eth",  kw:["ethereum","solidity","evm","uniswap","aave","compound","openzeppelin","hardhat","foundry","wagmi","ethers","viem","geth"] },
+  { key:"sol",  label:"SOL",    cls:"bdg-sol",  kw:["solana","anchor","spl-token","solana-labs"] },
+  { key:"rust", label:"Rust",   cls:"bdg-rust", kw:["rust","cargo","substrate","polkadot","parity","near","aptos","mysten","solana-labs"] },
+  { key:"cos",  label:"Cosmos", cls:"bdg-cos",  kw:["cosmos","ibc","tendermint","osmosis","celestia"] },
+  { key:"btc",  label:"BTC",    cls:"bdg-btc",  kw:["bitcoin","lightning","taproot","ordinals","btc"] },
+  { key:"near", label:"NEAR",   cls:"bdg-near", kw:["near","nearcore","aurora-is-near"] },
+  { key:"dot",  label:"DOT",    cls:"bdg-dot",  kw:["polkadot","substrate","parity","kusama","ink"] },
+  { key:"avax", label:"AVAX",   cls:"bdg-avax", kw:["avalanche","avax","ava-labs"] }
+];
+
+const LANGS = ["solidity","rust","move","vyper","cairo","go","typescript"];
+const LANG_LABELS = { solidity:"Solidity", rust:"Rust", move:"Move", vyper:"Vyper", cairo:"Cairo", go:"Go", typescript:"TypeScript" };
+
+// - Company Directory -
+const COMPANIES = [
+  { name:'Binance', org:'binance', cat:'Exchange', tags:["BSC","Multi"] },
+  { name:'Crypto.com', org:'crypto-com', cat:'Exchange', tags:["Multi"] },
+  { name:'Coinbase', org:'coinbase', cat:'Exchange', tags:["ETH","Base"] },
+  { name:'OKCoin', org:'okcoin', cat:'Exchange', tags:["Multi"] },
+  { name:'ByBit', org:'bybit-web3', cat:'Exchange', tags:["Multi"] },
+  { name:'Galaxy Digital', org:'galaxydigital-io', cat:'Finance', tags:["Multi"] },
+  { name:'Gemini', org:'gemini-exchange', cat:'Exchange', tags:["Multi"] },
+  { name:'Ripple', org:'ripple', cat:'L1', tags:["XRP"] },
+  { name:'Circle', org:'circlefin', cat:'Stablecoin', tags:["ETH","Multi"] },
+  { name:'Blockchain.com', org:'blockchain', cat:'Exchange', tags:["Multi"] },
+  { name:'KuCoin', org:'Kucoin', cat:'Exchange', tags:["Multi"] },
+  { name:'Ethereum', org:'ethereum', cat:'L1', tags:["ETH"] },
+  { name:'Kraken', org:'krakenfx', cat:'Exchange', tags:["Multi"] },
+  { name:'Bitpanda', org:'bitpanda', cat:'Exchange', tags:["Multi"] },
+  { name:'Ledger', org:'LedgerHQ', cat:'Hardware', tags:["Multi"] },
+  { name:'ConsenSys', org:'ConsenSys', cat:'Infrastructure', tags:["ETH"] },
+  { name:'Chainalysis', org:'chainalysis', cat:'Analytics', tags:["Multi"] },
+  { name:'OpenSea', org:'ProjectOpenSea', cat:'NFT', tags:["ETH"] },
+  { name:'Nexo', org:'nexofinance', cat:'Finance', tags:["Multi"] },
+  { name:'Bitso', org:'bitsoex', cat:'Exchange', tags:["Multi"] },
+  { name:'Chainlink Labs', org:'smartcontractkit', cat:'Oracle', tags:["Multi"] },
+  { name:'Anchorage Digital', org:'anchorage-digital', cat:'Custody', tags:["Multi"] },
+  { name:'Amber Group', org:'amber-labs', cat:'Finance', tags:["Multi"] },
+  { name:'OSL', org:'OSL-Technology', cat:'Exchange', tags:["Multi"] },
+  { name:'Uphold', org:'uphold', cat:'Exchange', tags:["Multi"] },
+  { name:'Worldcoin', org:'worldcoin', cat:'Identity', tags:["ETH"] },
+  { name:'Figure', org:'figuretechnologies', cat:'Finance', tags:["Multi"] },
+  { name:'Ava Labs', org:'ava-labs', cat:'L1', tags:["AVAX"] },
+  { name:'FalconX', org:'falconxnetwork', cat:'Finance', tags:["Multi"] },
+  { name:'BitMart', org:'bitmartexchange', cat:'Exchange', tags:["Multi"] },
+  { name:'Binance US', org:'binance-us', cat:'Exchange', tags:["Multi"] },
+  { name:'IOHK / Cardano', org:'input-output-hk', cat:'L1', tags:["ADA"] },
+  { name:'Modulus Labs', org:'Modulus-Labs', cat:'ZK', tags:["ETH"] },
+  { name:'MoonPay', org:'moonpay', cat:'Payments', tags:["Multi"] },
+  { name:'R3', org:'corda-network', cat:'Enterprise', tags:["Corda"] },
+  { name:'Bitmain', org:'bitmain-tech', cat:'Mining', tags:["BTC"] },
+  { name:'TRON', org:'tronprotocol', cat:'L1', tags:["TRX"] },
+  { name:'CoinMarketCap', org:'CoinMarketCap', cat:'Analytics', tags:["Multi"] },
+  { name:'Bitstamp', org:'bitstamp', cat:'Exchange', tags:["Multi"] },
+  { name:'Alchemy', org:'alchemyplatform', cat:'Infrastructure', tags:["ETH","Multi"] },
+  { name:'LMAX Digital', org:'LMAX-Exchange', cat:'Exchange', tags:["Multi"] },
+  { name:'Animoca Brands', org:'animoca-brands', cat:'Gaming', tags:["Multi"] },
+  { name:'Forte', org:'forte-labs', cat:'Gaming', tags:["Multi"] },
+  { name:'Coins.ph', org:'coins-ph', cat:'Exchange', tags:["Multi"] },
+  { name:'BRD', org:'breadwallet', cat:'Wallet', tags:["BTC","ETH"] },
+  { name:'Alpaca Markets', org:'Alpaca-BI', cat:'Finance', tags:["Multi"] },
+  { name:'0x Protocol', org:'0xProject', cat:'DeFi', tags:["ETH"] },
+  { name:'Phantom', org:'phantom', cat:'Wallet', tags:["SOL","ETH"] },
+  { name:'Rainbow', org:'rainbow-me', cat:'Wallet', tags:["ETH"] },
+  { name:'Poloniex', org:'poloniex', cat:'Exchange', tags:["Multi"] },
+  { name:'Brave / BAT', org:'brave', cat:'Browser', tags:["ETH"] },
+  { name:'Harmony', org:'harmony-one', cat:'L1', tags:["ONE"] },
+  { name:'Paxos', org:'paxosglobal', cat:'Stablecoin', tags:["ETH"] },
+  { name:'Digital Asset', org:'digital-asset', cat:'Enterprise', tags:["Multi"] },
+  { name:'SEBA Bank', org:'seba-bank', cat:'Finance', tags:["Multi"] },
+  { name:'Orchid Protocol', org:'OrchidTechnologies', cat:'Privacy', tags:["ETH"] },
+  { name:'Bitfinex', org:'bitfinexcom', cat:'Exchange', tags:["Multi"] },
+  { name:'Ethereum Foundation', org:'ethereum', cat:'L1', tags:["ETH"] },
+  { name:'Status', org:'status-im', cat:'Wallet', tags:["ETH"] },
+  { name:'Copper', org:'CopperHQ', cat:'Custody', tags:["Multi"] },
+  { name:'Exodus', org:'ExodusMovement', cat:'Wallet', tags:["Multi"] },
+  { name:'Chiliz', org:'chiliz', cat:'Sports', tags:["CHZ"] },
+  { name:'SupraOracles', org:'Entropy-Foundation', cat:'Oracle', tags:["Multi"] },
+  { name:'Avalanche / Ava Labs', org:'ava-labs', cat:'L1', tags:["AVAX"] },
+  { name:'Solana', org:'solana-labs', cat:'L1', tags:["SOL"] },
+  { name:'Stellar', org:'stellar', cat:'L1', tags:["XLM"] },
+  { name:'Axie Infinity / Sky Mavis', org:'axieinfinity', cat:'Gaming', tags:["RON"] },
+  { name:'Mythical Games', org:'MythicalGames', cat:'Gaming', tags:["Multi"] },
+  { name:'DFINITY', org:'dfinity', cat:'L1', tags:["ICP"] },
+  { name:'Uniswap Labs', org:'Uniswap', cat:'DeFi', tags:["ETH"] },
+  { name:'UMA Protocol', org:'UMAprotocol', cat:'DeFi', tags:["ETH"] },
+  { name:'Immutable', org:'immutable', cat:'Gaming', tags:["IMX"] },
+  { name:'Securitize', org:'securitize-io', cat:'RWA', tags:["ETH"] },
+  { name:'Nethermind', org:'NethermindEth', cat:'Infrastructure', tags:["ETH"] },
+  { name:'Aptos Labs', org:'aptos-labs', cat:'L1', tags:["APT"] },
+  { name:'TON Foundation', org:'ton-blockchain', cat:'L1', tags:["TON"] },
+  { name:'Dynamic', org:'dynamic-labs', cat:'Identity', tags:["Multi"] },
+  { name:'Gnosis', org:'gnosis', cat:'DeFi', tags:["ETH"] },
+  { name:'Mysten Labs / Sui', org:'MystenLabs', cat:'L1', tags:["SUI"] },
+  { name:'CertiK', org:'certikfoundation', cat:'Security', tags:["Multi"] },
+  { name:'MetaMask / ConsenSys', org:'MetaMask', cat:'Wallet', tags:["ETH"] },
+  { name:'Polkadot / Web3 Foundation', org:'paritytech', cat:'L1', tags:["DOT"] },
+  { name:'Magic Link', org:'magiclabs', cat:'Identity', tags:["Multi"] },
+  { name:'Figment', org:'figment-networks', cat:'Staking', tags:["Multi"] },
+  { name:'Parity Technologies', org:'paritytech', cat:'Infrastructure', tags:["DOT","ETH"] },
+  { name:'Web3 Foundation', org:'w3f', cat:'Foundation', tags:["DOT"] },
+  { name:'Cardano / IOHK', org:'input-output-hk', cat:'L1', tags:["ADA"] },
+  { name:'Dapper Labs', org:'dapperlabs', cat:'NFT', tags:["FLOW"] },
+  { name:'Sorare', org:'sorare', cat:'Gaming', tags:["ETH"] },
+  { name:'1inch', org:'1inch', cat:'DeFi', tags:["ETH"] },
+  { name:'CoinGecko', org:'coingecko', cat:'Analytics', tags:["Multi"] },
+  { name:'Textile', org:'textileio', cat:'Infrastructure', tags:["Multi"] },
+  { name:'SingularityNET', org:'singnet', cat:'AI', tags:["ETH"] },
+  { name:'Hedera', org:'hashgraph', cat:'L1', tags:["HBAR"] },
+  { name:'LayerZero', org:'LayerZero-Labs', cat:'Cross-chain', tags:["Multi"] },
+  { name:'NEAR Protocol', org:'near', cat:'L1', tags:["NEAR"] },
+  { name:'Bitpay', org:'bitpay', cat:'Payments', tags:["BTC","ETH"] },
+  { name:'Hacken', org:'hknio', cat:'Security', tags:["Multi"] },
+  { name:'BitGo', org:'BitGo', cat:'Custody', tags:["Multi"] },
+  { name:'BitMEX', org:'BitMEX', cat:'Exchange', tags:["Multi"] },
+  { name:'Steemit', org:'steemit', cat:'Social', tags:["STEEM"] },
+  { name:'Aleo', org:'AleoHQ', cat:'ZK', tags:["ALEO"] },
+  { name:'Immunefi', org:'immunefi-community', cat:'Security', tags:["Multi"] },
+  { name:'IOTA', org:'iotaledger', cat:'L1', tags:["IOTA"] },
+  { name:'Magic Eden', org:'magiceden-oss', cat:'NFT', tags:["SOL","ETH"] },
+  { name:'Offchain Labs / Arbitrum', org:'OffchainLabs', cat:'L2', tags:["ETH"] },
+  { name:'IOV Labs / RSK', org:'rsksmart', cat:'L2', tags:["BTC"] },
+  { name:'Decentraland', org:'decentraland', cat:'Metaverse', tags:["ETH"] },
+  { name:'Messari', org:'messari', cat:'Analytics', tags:["Multi"] },
+  { name:'Helium', org:'helium', cat:'DePIN', tags:["HNT"] },
+  { name:'Dune Analytics', org:'duneanalytics', cat:'Analytics', tags:["Multi"] },
+  { name:'MultiversX / Elrond', org:'multiversx', cat:'L1', tags:["EGLD"] },
+  { name:'OpenZeppelin', org:'OpenZeppelin', cat:'Security', tags:["ETH"] },
+  { name:'Transak', org:'transak', cat:'Payments', tags:["Multi"] },
+  { name:'Blockstream', org:'Blockstream', cat:'Infrastructure', tags:["BTC"] },
+  { name:'Akash Network', org:'akash-network', cat:'DePIN', tags:["AKT"] },
+  { name:'QuickNode', org:'quiknode-labs', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Protocol Labs / Filecoin', org:'protocol', cat:'Storage', tags:["FIL"] },
+  { name:'Aztec', org:'AztecProtocol', cat:'ZK', tags:["ETH"] },
+  { name:'Yuga Labs', org:'yugalabs', cat:'NFT', tags:["ETH"] },
+  { name:'ANKR', org:'Ankr-network', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Rarible', org:'rarible', cat:'NFT', tags:["ETH"] },
+  { name:'Sei Labs', org:'sei-protocol', cat:'L1', tags:["SEI"] },
+  { name:'OP Labs / Optimism', org:'ethereum-optimism', cat:'L2', tags:["ETH"] },
+  { name:'Matter Labs / zkSync', org:'matter-labs', cat:'L2', tags:["ETH"] },
+  { name:'EigenLayer', org:'Layr-Labs', cat:'Restaking', tags:["ETH"] },
+  { name:'Quant Network', org:'quantnetwork', cat:'Enterprise', tags:["Multi"] },
+  { name:'VeChain', org:'vechain', cat:'L1', tags:["VET"] },
+  { name:'AlphaPoint', org:'alphapoint', cat:'Exchange', tags:["Multi"] },
+  { name:'Arkham Intelligence', org:'arkhamhq', cat:'Analytics', tags:["Multi"] },
+  { name:'Algorand', org:'algorand', cat:'L1', tags:["ALGO"] },
+  { name:'Trail of Bits', org:'trailofbits', cat:'Security', tags:["Multi"] },
+  { name:'Zora', org:'ourzora', cat:'NFT', tags:["ETH"] },
+  { name:'Fetch AI', org:'fetchai', cat:'AI', tags:["FET"] },
+  { name:'Safe', org:'safe-global', cat:'Wallet', tags:["ETH","Multi"] },
+  { name:'Certora', org:'Certora', cat:'Security', tags:["ETH"] },
+  { name:'Concordium', org:'Concordium', cat:'L1', tags:["CCD"] },
+  { name:'Tenderly', org:'Tenderly', cat:'Infrastructure', tags:["ETH"] },
+  { name:'Bitfury', org:'bitfury-group', cat:'Infrastructure', tags:["BTC"] },
+  { name:'Ondo Finance', org:'ondoprotocol', cat:'RWA', tags:["ETH"] },
+  { name:'Unstoppable Domains', org:'unstoppabledomains', cat:'Identity', tags:["ETH"] },
+  { name:'Lido', org:'lidofinance', cat:'Staking', tags:["ETH"] },
+  { name:'Enjin', org:'enjin', cat:'Gaming', tags:["ETH"] },
+  { name:'XinFin / XDC', org:'XinFinOrg', cat:'L1', tags:["XDC"] },
+  { name:'Halborn', org:'HalbornSecurity', cat:'Security', tags:["Multi"] },
+  { name:'dYdX', org:'dydxprotocol', cat:'DeFi', tags:["ETH"] },
+  { name:'Protofire', org:'protofire-oss', cat:'Infrastructure', tags:["Multi"] },
+  { name:'DFNS', org:'dfns-tech', cat:'Infrastructure', tags:["Multi"] },
+  { name:'cLabs / Celo', org:'celo-org', cat:'L1', tags:["CELO"] },
+  { name:'Argent', org:'argentlabs', cat:'Wallet', tags:["ETH","STK"] },
+  { name:'Maple Finance', org:'maple-finance', cat:'DeFi', tags:["ETH"] },
+  { name:'Quantstamp', org:'quantstamp', cat:'Security', tags:["Multi"] },
+  { name:'Storj', org:'storj', cat:'Storage', tags:["STORJ"] },
+  { name:'ZetaChain', org:'zeta-chain', cat:'Cross-chain', tags:["Multi"] },
+  { name:'ChainSafe', org:'ChainSafe', cat:'Infrastructure', tags:["ETH","Multi"] },
+  { name:'The Graph', org:'graphprotocol', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Avail', org:'availproject', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Fantom', org:'Fantom-foundation', cat:'L1', tags:["FTM"] },
+  { name:'Monad Labs', org:'monad-labs', cat:'L1', tags:["MON"] },
+  { name:'Moralis', org:'MoralisWeb3', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Bancor', org:'bancorprotocol', cat:'DeFi', tags:["ETH"] },
+  { name:'Gelato', org:'gelatodigital', cat:'Infrastructure', tags:["ETH","Multi"] },
+  { name:'Gitcoin', org:'gitcoinco', cat:'Public Goods', tags:["ETH"] },
+  { name:'IOTEX', org:'iotexproject', cat:'DePIN', tags:["IOTX"] },
+  { name:'Privy', org:'privy-io', cat:'Identity', tags:["Multi"] },
+  { name:'Informal Systems', org:'informalsystems', cat:'Infrastructure', tags:["Cosmos"] },
+  { name:'WalletConnect', org:'WalletConnect', cat:'Infrastructure', tags:["Multi"] },
+  { name:'RedStone', org:'redstone-finance', cat:'Oracle', tags:["Multi"] },
+  { name:'Tezos', org:'tezos', cat:'L1', tags:["XTZ"] },
+  { name:'Zerion', org:'zeriontech', cat:'Wallet', tags:["ETH","Multi"] },
+  { name:'Acala', org:'AcalaNetwork', cat:'DeFi', tags:["DOT"] },
+  { name:'Coti', org:'coti-dev', cat:'L1', tags:["COTI"] },
+  { name:'Polymath', org:'polymath-network', cat:'RWA', tags:["ETH"] },
+  { name:'Gensyn', org:'gensyn-ai', cat:'AI', tags:["Multi"] },
+  { name:'Pundi X', org:'pundix', cat:'Payments', tags:["Multi"] },
+  { name:'SuperRare', org:'superrare', cat:'NFT', tags:["ETH"] },
+  { name:'Fuel Labs', org:'FuelLabs', cat:'L2', tags:["ETH"] },
+  { name:'Taiko', org:'taikoxyz', cat:'L2', tags:["ETH"] },
+  { name:'Celestia', org:'celestiaorg', cat:'Infrastructure', tags:["TIA"] },
+  { name:'Centrifuge', org:'centrifuge', cat:'RWA', tags:["ETH"] },
+  { name:'Covalent', org:'covalenthq', cat:'Analytics', tags:["Multi"] },
+  { name:'Tally', org:'withtally', cat:'Governance', tags:["ETH"] },
+  { name:'Berachain', org:'berachain', cat:'L1', tags:["BERA"] },
+  { name:'Goldfinch', org:'goldfinch-eng', cat:'DeFi', tags:["ETH"] },
+  { name:'Sequence', org:'0xsequence', cat:'Infrastructure', tags:["Multi"] },
+  { name:'deBridge', org:'debridge-finance', cat:'Cross-chain', tags:["Multi"] },
+  { name:'Bittensor', org:'opentensor', cat:'AI', tags:["TAO"] },
+  { name:'Coinmetrics', org:'coinmetrics', cat:'Analytics', tags:["Multi"] },
+  { name:'OtterSec', org:'otter-sec', cat:'Security', tags:["Multi"] },
+  { name:'Sigma Prime', org:'sigp', cat:'Security', tags:["ETH"] },
+  { name:'Biconomy', org:'bcnmy', cat:'Infrastructure', tags:["ETH","Multi"] },
+  { name:'Cyfrin', org:'Cyfrin', cat:'Security', tags:["ETH"] },
+  { name:'Dash', org:'dashpay', cat:'L1', tags:["DASH"] },
+  { name:'Espresso Systems', org:'EspressoSystems', cat:'Infrastructure', tags:["ETH"] },
+  { name:'Synapse Protocol', org:'synapsecns', cat:'Cross-chain', tags:["Multi"] },
+  { name:'Zilliqa', org:'Zilliqa', cat:'L1', tags:["ZIL"] },
+  { name:'Civic', org:'civicteam', cat:'Identity', tags:["ETH","SOL"] },
+  { name:'Origin Protocol', org:'OriginProtocol', cat:'DeFi', tags:["ETH"] },
+  { name:'Wormhole', org:'wormhole-foundation', cat:'Cross-chain', tags:["Multi"] },
+  { name:'Subsquid', org:'subsquid', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Mina Protocol', org:'MinaProtocol', cat:'ZK', tags:["MINA"] },
+  { name:'Aragon', org:'aragon', cat:'Governance', tags:["ETH"] },
+  { name:'Balancer', org:'balancer-labs', cat:'DeFi', tags:["ETH"] },
+  { name:'SpruceID', org:'spruceid', cat:'Identity', tags:["ETH"] },
+  { name:'Thirdweb', org:'thirdweb-dev', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Blockscout', org:'blockscout', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Connext', org:'connext', cat:'Cross-chain', tags:["Multi"] },
+  { name:'API3', org:'api3dao', cat:'Oracle', tags:["ETH"] },
+  { name:'Axiom', org:'axiom-crypto', cat:'ZK', tags:["ETH"] },
+  { name:'Chainflip Labs', org:'chainflip-io', cat:'Cross-chain', tags:["Multi"] },
+  { name:'Reown / WalletConnect', org:'reown-com', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Agoric', org:'Agoric', cat:'L1', tags:["BLD"] },
+  { name:'Axelar', org:'axelarnetwork', cat:'Cross-chain', tags:["Multi"] },
+  { name:'ENS Labs', org:'ensdomains', cat:'Identity', tags:["ETH"] },
+  { name:'Initia', org:'initia-labs', cat:'L1', tags:["Multi"] },
+  { name:'Pyth Network', org:'pyth-network', cat:'Oracle', tags:["Multi"] },
+  { name:'Euler Finance', org:'euler-xyz', cat:'DeFi', tags:["ETH"] },
+  { name:'Jump Crypto', org:'jump-crypto', cat:'Finance', tags:["Multi"] },
+  { name:'Synthetix', org:'Synthetixio', cat:'DeFi', tags:["ETH"] },
+  { name:'Infura / ConsenSys', org:'INFURA', cat:'Infrastructure', tags:["ETH"] },
+  { name:'Eclipse Labs', org:'Eclipse-Labs', cat:'L2', tags:["ETH","SOL"] },
+  { name:'Frax Finance', org:'FraxFinance', cat:'DeFi', tags:["ETH"] },
+  { name:'Nomic Foundation', org:'NomicFoundation', cat:'Infrastructure', tags:["ETH"] },
+  { name:'Aleph Zero', org:'Cardinal-Cryptography', cat:'L1', tags:["AZERO"] },
+  { name:'Ethena Labs', org:'ethena-labs', cat:'DeFi', tags:["ETH"] },
+  { name:'Lit Protocol', org:'LIT-Protocol', cat:'Identity', tags:["Multi"] },
+  { name:'Index Coop', org:'IndexCoop', cat:'DeFi', tags:["ETH"] },
+  { name:'Web3Auth / Torus', org:'torusresearch', cat:'Identity', tags:["Multi"] },
+  { name:'Waves', org:'wavesplatform', cat:'L1', tags:["WAVES"] },
+  { name:'Block.one / EOS', org:'EOSIO', cat:'L1', tags:["EOS"] },
+  { name:'Yearn Finance', org:'yearn', cat:'DeFi', tags:["ETH"] },
+  { name:'Liquity', org:'liquity', cat:'DeFi', tags:["ETH"] },
+  { name:'Compound', org:'compound-finance', cat:'DeFi', tags:["ETH"] },
+  { name:'Curve Finance', org:'curvefi', cat:'DeFi', tags:["ETH"] },
+  { name:'Kakarot zkEVM', org:'kkrt-labs', cat:'L2', tags:["ETH"] },
+  { name:'Nervos Network', org:'nervosnetwork', cat:'L1', tags:["CKB"] },
+  { name:'Pocket Network', org:'pokt-network', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Radix', org:'radixdlt', cat:'L1', tags:["XRD"] },
+  { name:'Ribbon Finance', org:'ribbon-finance', cat:'DeFi', tags:["ETH"] },
+  { name:'PeckShield', org:'peckshield', cat:'Security', tags:["Multi"] },
+  { name:'Hyperliquid', org:'hyperliquid-dex', cat:'DeFi', tags:["Multi"] },
+  { name:'Palm NFT Studio', org:'Palm-NFT-Studio', cat:'NFT', tags:["ETH"] },
+  { name:'Sommelier', org:'PeggyJV', cat:'DeFi', tags:["ETH"] },
+  { name:'Polymesh', org:'PolymeshAssociation', cat:'RWA', tags:["POLYX"] },
+  { name:'Kinto', org:'kintoxyz', cat:'L2', tags:["ETH"] },
+  { name:'Flipside Crypto', org:'FlipsideCrypto', cat:'Analytics', tags:["Multi"] },
+  { name:'Ramp Network', org:'RampNetwork', cat:'Payments', tags:["Multi"] },
+  { name:'Hex Trust', org:'hextrust', cat:'Custody', tags:["Multi"] },
+  { name:'Taurus Group', org:'taurus-sa', cat:'Infrastructure', tags:["Multi"] },
+  { name:'0G Labs', org:'0glabs', cat:'Infrastructure', tags:["Multi"] },
+  { name:'Derive / Lyra', org:'derivexyz', cat:'DeFi', tags:["ETH"] },
+  { name:'Vertex Protocol', org:'vertex-protocol', cat:'DeFi', tags:["ETH"] },
+];
+
+// Total: 252 companies
+
+const CATEGORIES = [...new Set(COMPANIES.map(c=>c.cat))].sort();
+const ALL_TAGS = [...new Set(COMPANIES.flatMap(c=>c.tags))].filter(t=>t!=="Multi").sort();
+
+
+function detectBadges(repos) {
+  if (!repos || !repos.length) return [];
+  const text = repos.map(r => [r.name||"",r.description||"",r.language||"",...(r.topics||[])].join(" ")).join(" ").toLowerCase();
+  const badges = [];
+  const seen = new Set();
+  PROTOS.forEach(p => { if (p.kw.some(k => text.includes(k)) && !seen.has(p.key)) { seen.add(p.key); badges.push({key:p.key,label:p.label,cls:p.cls}); } });
+  const langs = repos.map(r=>(r.language||"").toLowerCase());
+  LANGS.forEach(l => { if ((langs.includes(l)||text.includes(l)) && !seen.has("lang-"+l)) { seen.add("lang-"+l); badges.push({key:"lang-"+l,label:LANG_LABELS[l]||l,cls:"bdg-lang"}); } });
+  if (["defi","dex","amm","lending","vault","yield","liquidity"].some(w=>text.includes(w)) && !seen.has("defi")) { seen.add("defi"); badges.push({key:"defi",label:"DeFi",cls:"bdg-defi"}); }
+  return badges;
+}
+
+function calcScore(c) {
+  const days = c.daysSince || 999;
+  const rec = days < 30 ? 40 : days < 90 ? 25 : days < 180 ? 10 : 0;
+  const com = Math.min(40, Math.floor(Math.log2((c.contributions||0)+1)*6));
+  const rep = Math.min(20, c.publicRepos||0);
+  return Math.min(99, rec+com+rep);
+}
+
+function scoreColor(s) { return s>=70?"var(--a)":s>=40?"var(--a3)":"var(--t3)"; }
+
+function actInfo(c) {
+  const d = c.daysSince;
+  if (!d || d<30) return {cls:"ahot",col:"var(--a)",txt:"Active now"};
+  if (d<90) return {cls:"awarm",col:"var(--a3)",txt:Math.round(d)+"d ago"};
+  return {cls:"acold",col:"var(--t3)",txt:Math.round(d)+"d ago"};
+}
+
+function liUrl(c) {
+  const n = c.name && c.name!==c.login ? c.name : c.login;
+  return "https://www.google.com/search?q="+encodeURIComponent('"'+n+'" site:linkedin.com/in');
+}
+
+function dlFile(name, content, type) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([content],{type}));
+  a.download = name; a.click();
+}
+
+function generateOutreach(c, tone, repoInfo) {
+  const first = c.name && c.name!==c.login ? c.name.split(" ")[0] : c.login;
+  const bl = (c.badges||[]).map(b=>b.label);
+  const commits = (c.contributions||0).toLocaleString();
+  const repoFull = repoInfo ? repoInfo.full_name : "the repository";
+  const repoShort = repoInfo ? repoInfo.name : "this project";
+  const active = c.daysSince && c.daysSince < 60;
+
+  const hasSol = bl.some(b=>["Solidity","ETH","DeFi"].includes(b));
+  const hasRust = bl.includes("Rust");
+  const hasCross = bl.some(b=>["DOT","Cosmos","NEAR","AVAX","SOL"].includes(b));
+  const hasDefi = bl.includes("DeFi");
+
+  let hook, role;
+  if (hasCross && hasRust) {
+    hook = "Your cross-chain and Rust work maps directly onto what we're building at Chainlink Labs. CCIP — our Cross-Chain Interoperability Protocol — is now live across 70+ networks including Solana, and we're scaling the engineering team building the next version. It's serious Rust work, distributed systems at a scale most projects never reach.";
+    role = "protocol engineer on CCIP";
+  } else if (hasSol && hasDefi) {
+    hook = "The DeFi protocols you've contributed to — including "+repoShort+" — are built on top of Chainlink infrastructure: Price Feeds, Data Streams, VRF. We're hiring the engineers who want to work on that foundational layer itself, not just the protocols that sit on top of it. Different kind of leverage.";
+    role = "smart contract / protocol engineer";
+  } else if (hasRust) {
+    hook = "At Chainlink Labs we run one of the most demanding distributed Rust codebases in the industry — our oracle node network processes data for over $18 trillion in onchain transaction value. We're expanding core engineering and your Rust background is exactly the profile we're looking for.";
+    role = "distributed systems engineer";
+  } else if (hasCross) {
+    hook = "Chainlink CCIP is fast becoming the standard cross-chain protocol — Coinbase, Lido, Aave, and Swift are all building on it. Given your multi-ecosystem background, the role I have in mind is working on the interoperability layer that connects all of them.";
+    role = "cross-chain protocol engineer";
+  } else if (hasSol) {
+    hook = "Your Solidity contributions to "+repoShort+" show you understand protocol design at a serious level. At Chainlink Labs we build the oracle and data infrastructure the entire DeFi stack depends on — Aave, GMX, Synthetix. We need engineers who've shipped in production.";
+    role = "smart contract engineer";
+  } else {
+    hook = "Chainlink Labs is the infrastructure layer powering the majority of DeFi — Price Feeds, CCIP, Data Streams, VRF — and we're scaling the team that builds it. Your work on "+repoShort+" shows the depth we look for.";
+    role = "senior engineer";
+  }
+
+  const actLine = active ? "I can see you've been actively shipping recently — " : "I know you may have a lot on, but ";
+
+  if (tone==="brief") return (
+    "Hi "+first+",\n\n"+
+    "Saw your "+commits+" commits to "+repoFull+" — impressive work.\n\n"+
+    "I'm recruiting a "+role+" at Chainlink Labs. "+(hasCross?"CCIP is live on 70+ chains — Rust-heavy, serious scale.":hasSol?"We power the oracle layer Aave, GMX, and Synthetix depend on.":"We run the infrastructure behind $18T+ in onchain transaction value.")+"\n\n"+
+    "Worth a 15-min call?\n\n"+
+    "[Your name] | Chainlink Labs Talent"
+  );
+
+  if (tone==="story") return (
+    "Hi "+first+",\n\n"+
+    "I'll be upfront — I found you through your GitHub contributions to "+repoFull+", and "+commits+" commits is a serious body of work. I wanted to reach out personally.\n\n"+
+    hook+"\n\n"+
+    "What makes Chainlink Labs different from most web3 companies is the scale of real-world impact. We're not building another protocol — we're the infrastructure that protocols depend on. Swift is using CCIP for tokenised asset settlement. Coinbase chose us as the exclusive bridge for all their wrapped assets. Mastercard is building on us to connect 3 billion cardholders to onchain rails.\n\n"+
+    actLine+"I think your background is a strong match for the "+role+" role we're hiring for. I'd love to tell you more — would a short call this week work?\n\n"+
+    "[Your name]\n[Your title] | Chainlink Labs Talent\nchainlinklabs.com/careers"
+  );
+
+  // default: direct
+  return (
+    "Hi "+first+",\n\n"+
+    "I came across your work on "+repoFull+" — "+commits+" commits is a serious body of work.\n\n"+
+    hook+"\n\n"+
+    "I'm recruiting for a "+role+" role at Chainlink Labs. The team is fully remote, well-funded, and working on infrastructure that genuinely matters — Swift, Mastercard, Coinbase, and Fidelity are all building on what we ship.\n\n"+
+    actLine+"would you be open to a 20-minute call to hear more? Happy to share full details first if that's easier.\n\n"+
+    "[Your name]\n[Your title] | Chainlink Labs Talent"
+  );
+}
+
+// - State -
+let state = {
+  mode:"repo", repoInput:"", tokenInput: sessionStorage.getItem("rr_token")||"", tokenSaved: !!(sessionStorage.getItem("rr_token")), showTokenModal:false, aiQuery:"", aiSuggs:[],
+  companySearch:"", companyFilter:"All", companyTagFilter:"All",
+  selectedCompany:null, companyRepos:[], selectedRepos:[],
+  multiContributors:[], multiLoading:false, multiLoadText:"",
+  loading:false, loadingText:"", loadingSub:"",
+  error:"", contributors:[], repoInfo:null,
+  filter:"all", langFilter:"all", textFilter:"",
+  saved: JSON.parse(localStorage.getItem("rr_saved")||"{}"),
+  notes: JSON.parse(localStorage.getItem("rr_notes")||"{}"),
+  showSaved:false, profileOpen:null, profileRepos:{},
+  noteText:"", outreachTone:"direct", outreachMsg:"", outreachCopied:false
+};
+
+function setState(patch) {
+  Object.assign(state, patch);
+  if (patch.saved !== undefined) localStorage.setItem("rr_saved", JSON.stringify(state.saved));
+  if (patch.notes !== undefined) localStorage.setItem("rr_notes", JSON.stringify(state.notes));
+  if (patch.tokenInput !== undefined) {
+    if (patch.tokenInput.trim()) sessionStorage.setItem("rr_token", patch.tokenInput.trim());
+    else sessionStorage.removeItem("rr_token");
+  }
+  render();
+}
+// Update state without re-rendering (for text inputs to avoid focus loss)
+function setStateQuiet(patch) {
+  Object.assign(state, patch);
+  if (patch.tokenInput !== undefined) {
+    if (patch.tokenInput.trim()) sessionStorage.setItem("rr_token", patch.tokenInput.trim());
+    else sessionStorage.removeItem("rr_token");
+  }
+}
+
+// - API helpers -
+function getHeaders() {
+  const h = {"Accept":"application/vnd.github.v3+json"};
+  // Always read from sessionStorage as source of truth — state.tokenInput may lag
+  const token = sessionStorage.getItem("rr_token") || state.tokenInput.trim();
+  if (token) h["Authorization"] = "Bearer "+token;
+  return h;
+}
+
+async function fetchRepo() {
+  const input = state.repoInput.trim();
+  if (!input.includes("/")) { setState({error:"Enter a valid repo as owner/repository — e.g. Uniswap/v3-core"}); return; }
+  const [owner, repo] = input.split("/").map(s=>s.trim());
+  if (!owner||!repo) { setState({error:"Enter a valid repo as owner/repository"}); return; }
+  const h = getHeaders();
+  setState({loading:true,loadingText:"Fetching repository info...",loadingSub:"",error:"",contributors:[],repoInfo:null});
+
+  try {
+    const rr = await fetch("https://api.github.com/repos/"+owner+"/"+repo, {headers:h});
+    if (!rr.ok) {
+      const e = await rr.json().catch(()=>({}));
+      throw new Error(rr.status===404?"Repository not found — check the spelling":rr.status===403?"Rate limit hit — add a GitHub token to continue":rr.status===401?"Invalid GitHub token":e.message||"GitHub API error ("+rr.status+")");
+    }
+    const rd = await rr.json();
+    setState({repoInfo:rd,loadingText:"Fetching contributors...",loadingSub:"Paginating commit history"});
+
+    let all = [];
+    for (let p=1;p<=5;p++) {
+      const cr = await fetch("https://api.github.com/repos/"+owner+"/"+repo+"/contributors?per_page=100&page="+p+"&anon=false",{headers:h});
+      if (!cr.ok) { const e=await cr.json().catch(()=>({})); throw new Error(e.message||"Failed to fetch contributors"); }
+      const cd = await cr.json();
+      if (!Array.isArray(cd)||cd.length===0) break;
+      all = all.concat(cd);
+      if (cd.length<100) break;
+    }
+    if (all.length===0) throw new Error("No contributors found for this repository.");
+
+    setState({loadingText:"Enriching "+all.length+" profiles...",loadingSub:"Fetching activity, languages & web3 signals"});
+    const enriched = [];
+    for (let i=0;i<all.length;i+=6) {
+      const batch = all.slice(i,i+6);
+      const res = await Promise.all(batch.map(async c => {
+        try {
+          const [pr,rr2] = await Promise.all([
+            fetch("https://api.github.com/users/"+c.login,{headers:h}),
+            fetch("https://api.github.com/users/"+c.login+"/repos?per_page=30&sort=updated",{headers:h})
+          ]);
+          const p = pr.ok ? await pr.json() : {};
+          const repos = rr2.ok ? await rr2.json() : [];
+          const lastPush = Array.isArray(repos)&&repos.length ? repos[0].pushed_at : null;
+          const daysSince = lastPush ? (Date.now()-new Date(lastPush).getTime())/86400000 : null;
+          return { login:c.login, avatar_url:c.avatar_url, html_url:c.html_url, contributions:c.contributions,
+            name:p.name||c.login, email:p.email||null, location:p.location||null,
+            company:p.company||null, bio:p.bio||null, publicRepos:p.public_repos||0,
+            daysSince, badges:detectBadges(Array.isArray(repos)?repos:[]) };
+        } catch {
+          return {login:c.login,avatar_url:c.avatar_url,html_url:c.html_url,contributions:c.contributions,name:c.login,email:null,location:null,company:null,bio:null,publicRepos:0,daysSince:null,badges:[]};
+        }
+      }));
+      enriched.push(...res);
+      setState({loadingText:"Enriched "+Math.min(i+6,all.length)+" / "+all.length+" profiles..."});
+    }
+    setState({loading:false,contributors:enriched});
+  } catch(e) {
+    setState({loading:false,error:e.message});
+  }
+}
+
+function aiSearch() {
+  const q = state.aiQuery.toLowerCase().trim();
+  if (!q) return;
+  const scored = Object.entries(KB).map(([role,data]) => {
+    const words = q.split(" ").filter(w=>w.length>2);
+    const s = role.split(" ").filter(w=>words.includes(w)).length*2 + data.tags.filter(t=>words.some(w=>t.toLowerCase().includes(w))).length + (q.includes(role)?5:0);
+    return {role,data,s};
+  }).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+
+  const results = [];
+  const src = scored.length ? scored.slice(0,3) : Object.entries(KB).slice(0,3).map(([role,data])=>({role,data}));
+  src.forEach(({data}) => data.repos.slice(0,3).forEach(repo => results.push({repo,reason:data.reason,tags:data.tags})));
+  setState({aiSuggs:results});
+}
+
+function getFiltered() {
+  return state.contributors.filter(c => {
+    if (state.filter==="email"&&!c.email) return false;
+    if (state.filter==="active"&&(!c.daysSince||c.daysSince>90)) return false;
+    if (state.filter==="saved"&&!state.saved[c.login]) return false;
+    if (state.langFilter!=="all"&&!c.badges.some(b=>b.key==="lang-"+state.langFilter||b.key===state.langFilter)) return false;
+    if (state.textFilter) {
+      const q=state.textFilter.toLowerCase();
+      if (![(c.name||""),(c.login||""),(c.location||""),(c.company||""),(c.bio||"")].some(v=>v.toLowerCase().includes(q))) return false;
+    }
+    return true;
+  });
+}
+
+async function openProfile(c) {
+  setState({profileOpen:c,noteText:state.notes[c.login]||"",outreachMsg:"",outreachCopied:false});
+  if (!state.profileRepos[c.login]) {
+    try {
+      const r = await fetch("https://api.github.com/users/"+c.login+"/repos?per_page=6&sort=stars",{headers:getHeaders()});
+      const repos = r.ok ? await r.json() : [];
+      const pr = {...state.profileRepos};
+      pr[c.login] = repos;
+      setState({profileRepos:pr});
+    } catch {}
+  }
+}
+
+function copyOutreach() {
+  if (!state.outreachMsg) return;
+  navigator.clipboard.writeText(state.outreachMsg).then(()=>{
+    setState({outreachCopied:true});
+    setTimeout(()=>setState({outreachCopied:false}),2000);
+  }).catch(()=>{});
+}
+
+
+// - Company Functions -
+async function fetchCompanyRepos(org) {
+  // Always read token fresh from sessionStorage at call time
+  const token = sessionStorage.getItem("rr_token") || state.tokenInput.trim();
+  const h = {"Accept":"application/vnd.github.v3+json"};
+  if (token) h["Authorization"] = "Bearer "+token;
+
+  setState({companyRepos:[], selectedRepos:[], multiContributors:[], multiLoading:false, error:""});
+
+  const doFetch = async (url) => {
+    let res;
+    try { res = await fetch(url, {headers:h}); }
+    catch(e) { throw new Error("Could not reach GitHub API. Check your internet connection."); }
+    if (res.status === 401) throw new Error("Invalid GitHub token — please check and re-save your token.");
+    if (res.status === 403) {
+      const b = await res.json().catch(()=>({}));
+      throw new Error((b.message||"").includes("rate limit")
+        ? "Rate limit hit — add or refresh your GitHub token."
+        : "GitHub access denied (403). Your token may need read:user scope.");
+    }
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error("GitHub error "+res.status+" for "+org);
+    return res.json();
+  };
+
+  try {
+    // Try /orgs/ first
+    let repos = await doFetch("https://api.github.com/orgs/"+org+"/repos?per_page=100&sort=updated&type=public");
+    // Fall back to /users/ (some orgs are registered as users)
+    if (repos === null) repos = await doFetch("https://api.github.com/users/"+org+"/repos?per_page=100&sort=updated&type=public");
+    if (repos === null) { setState({error:"Could not find org: "+org+" on GitHub. Check the org handle."}); return; }
+    const filtered = Array.isArray(repos) ? repos.filter(r=>!r.fork).sort((a,b)=>b.stargazers_count-a.stargazers_count) : [];
+    if (!filtered.length) { setState({error:"No public repos found for "+org}); return; }
+    setState({companyRepos:filtered, error:""});
+  } catch(e) {
+    setState({error:e.message});
+  }
+}
+
+async function searchCompanyOnGitHub(query) {
+  const h = getHeaders();
+  try {
+    const res = await fetch("https://api.github.com/search/users?q="+encodeURIComponent(query+" type:org")+"&per_page=5", {headers:h});
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.items||[]).slice(0,5);
+  } catch { return []; }
+}
+
+function toggleRepoSelection(repo) {
+  const sel = state.selectedRepos;
+  const idx = sel.findIndex(r=>r.full_name===repo.full_name);
+  if (idx>=0) setState({selectedRepos: sel.filter((_,i)=>i!==idx)});
+  else setState({selectedRepos: [...sel, repo]});
+}
+
+async function fetchSelectedReposContributors() {
+  if (!state.selectedRepos.length) return;
+  const h = getHeaders();
+  setState({multiLoading:true, multiLoadText:"Starting...", multiContributors:[], error:""});
+  const allByLogin = {};
+  for (let ri=0; ri<state.selectedRepos.length; ri++) {
+    const repo = state.selectedRepos[ri];
+    setState({multiLoadText:"Fetching contributors from "+repo.full_name+" ("+(ri+1)+"/"+state.selectedRepos.length+")"});
+    try {
+      let page=1;
+      while(page<=3) {
+        const res = await fetch("https://api.github.com/repos/"+repo.full_name+"/contributors?per_page=100&page="+page+"&anon=false",{headers:h});
+        if (!res.ok) break;
+        const data = await res.json();
+        if (!Array.isArray(data)||data.length===0) break;
+        data.forEach(c => {
+          if (!allByLogin[c.login]) {
+            allByLogin[c.login] = {...c, repos:[repo.full_name], companies:[state.selectedCompany?state.selectedCompany.name:repo.full_name]};
+          } else {
+            if (!allByLogin[c.login].repos.includes(repo.full_name)) allByLogin[c.login].repos.push(repo.full_name);
+          }
+        });
+        if (data.length<100) break;
+        page++;
+      }
+    } catch {}
+  }
+  const logins = Object.values(allByLogin);
+  setState({multiLoadText:"Enriching "+logins.length+" profiles..."});
+  const enriched = [];
+  for (let i=0;i<logins.length;i+=6) {
+    const batch = logins.slice(i,i+6);
+    const results = await Promise.all(batch.map(async c => {
+      try {
+        const [pr,rr] = await Promise.all([
+          fetch("https://api.github.com/users/"+c.login,{headers:h}),
+          fetch("https://api.github.com/users/"+c.login+"/repos?per_page=30&sort=updated",{headers:h})
+        ]);
+        const p = pr.ok ? await pr.json() : {};
+        const repos2 = rr.ok ? await rr.json() : [];
+        const lastPush = Array.isArray(repos2)&&repos2.length ? repos2[0].pushed_at : null;
+        const daysSince = lastPush ? (Date.now()-new Date(lastPush).getTime())/86400000 : null;
+        return {...c, name:p.name||c.login, email:p.email||null, location:p.location||null,
+          company:p.company||null, bio:p.bio||null, publicRepos:p.public_repos||0,
+          daysSince, badges:detectBadges(Array.isArray(repos2)?repos2:[])};
+      } catch {
+        return {...c, name:c.login, email:null, location:null, company:null, bio:null, publicRepos:0, daysSince:null, badges:[]};
+      }
+    }));
+    enriched.push(...results);
+    setState({multiLoadText:"Enriched "+Math.min(i+6,logins.length)+" / "+logins.length+" profiles..."});
+  }
+  setState({multiLoading:false, multiContributors:enriched, contributors:enriched, repoInfo:null,
+    filter:"all", langFilter:"all", textFilter:"", mode:"company-results"});
+}
+
+// - Render -
+function el(tag, attrs, ...children) {
+  const e = document.createElement(tag);
+  if (attrs) Object.entries(attrs).forEach(([k,v]) => {
+    if (k==="className") e.className=v;
+    else if (k==="style"&&typeof v==="object") Object.assign(e.style,v);
+    else if (k.startsWith("on")&&typeof v==="function") e.addEventListener(k.slice(2).toLowerCase(),v);
+    else if (k==="htmlFor") e.htmlFor=v;
+    else if (k==="checked") e.checked=v;
+    else if (k==="disabled") e.disabled=v;
+    else if (k==="readOnly") e.readOnly=v;
+    else if (k==="value"&&(tag==="input"||tag==="textarea")) e.value=v;
+    else e.setAttribute(k,v);
+  });
+  children.flat(Infinity).forEach(ch => {
+    if (ch==null||ch===false) return;
+    e.appendChild(typeof ch==="string"||typeof ch==="number" ? document.createTextNode(String(ch)) : ch);
+  });
+  return e;
+}
+
+function bdg(b) { return el("span",{className:"bdg "+b.cls},b.label); }
+
+function render() {
+  const app = document.getElementById("app");
+  app.innerHTML = "";
+
+  const filtered = getFiltered();
+  const savedCount = Object.keys(state.saved).length;
+  const withEmail = state.contributors.filter(c=>c.email).length;
+  const activeDevs = state.contributors.filter(c=>c.daysSince&&c.daysSince<90).length;
+  const web3Devs = state.contributors.filter(c=>c.badges&&c.badges.length>0).length;
+  const allLangs = [...new Set(state.contributors.flatMap(c=>c.badges.filter(b=>b.key.startsWith("lang-")).map(b=>b.key.replace("lang-",""))))];
+
+  // HEADER
+  const header = el("header",{},
+    el("div",{className:"wrap"},
+      el("div",{className:"hinner"},
+        el("div",{className:"logo"},
+          el("div",{className:"hex"}),
+          el("div",{},
+            el("div",{className:"logo-text"},"Repo",el("span",{},"Recruit")),
+            el("div",{className:"logo-sub"},"Web3 Talent Sourcing")
+          )
+        ),
+        el("div",{className:"hright"},
+          el("button",{className:"saved-btn",onClick:()=>setState({showSaved:true})},
+            "★ Saved",
+            savedCount>0?el("span",{className:"sc"},savedCount):null
+          ),
+          state.tokenSaved
+            ? el("div",{className:"pill",style:{borderColor:"rgba(0,229,160,0.4)",background:"rgba(0,229,160,0.08)",cursor:"pointer"},onClick:()=>{ sessionStorage.removeItem("rr_token"); setState({tokenInput:"",tokenSaved:false}); }},
+                el("div",{className:"dot"}),
+                el("span",{style:{color:"var(--a)"}},"Token Active"),
+                el("span",{style:{fontSize:"9px",color:"var(--t3)",marginLeft:"4px"}},"× clear")
+              )
+            : el("div",{className:"pill",style:{cursor:"pointer",borderColor:"rgba(245,158,11,0.3)"},onClick:()=>setState({showTokenModal:true})},
+                el("div",{className:"dot",style:{background:"var(--a3)"}}),
+                el("span",{style:{color:"var(--a3)"}},"Add Token")
+              ),
+          el("div",{className:"pill"},el("div",{className:"dot"}),"GitHub API Live")
+        )
+      )
+    )
+  );
+
+  // HERO
+  const hero = el("div",{className:"hero"},
+    el("div",{className:"eyebrow"},"⬡ Web3 Recruiter Intelligence"),
+    el("h1",{className:"htitle"},"Find ",el("em",{},"builders"),",",el("br",{})," ",el("span",{className:"dim"},"not just developers")),
+    el("p",{className:"hsub"},"Surface web3 talent from GitHub — with protocol badges, activity scores, language detection, and Chainlink-tailored outreach. Built for web3 recruiters.")
+  );
+
+  // MODE TOGGLE
+  const modeToggle = el("div",{className:"mode-toggle",style:{maxWidth:"560px"}},
+    el("button",{className:"mbtn"+(state.mode==="repo"?" on":""),onClick:()=>setState({mode:"repo",aiSuggs:[]})}, "⌨ Repo Search"),
+    el("button",{className:"mbtn"+(state.mode==="ai"?" on":""),onClick:()=>setState({mode:"ai"})}, "✦ AI-Assisted"),
+    el("button",{className:"mbtn"+(state.mode==="companies"||state.mode==="company-results"?" on":""),onClick:()=>setState({mode:"companies"})}, "🏢 Companies")
+  );
+
+  // SEARCH CARD
+  let searchCard;
+  if (state.mode==="repo") {
+    const inp = el("input",{type:"text",className:"",value:state.repoInput,placeholder:"owner/repository — e.g. Uniswap/v3-core",autocomplete:"off",onInput:e=>setStateQuiet({repoInput:e.target.value})});
+    inp.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!state.loading) fetchRepo(); });
+    const ti = el("input",{type:"password",value:state.tokenInput,placeholder:"ghp_xxxxxxxxxxxx",onInput:e=>setStateQuiet({tokenInput:e.target.value})});
+    searchCard = el("div",{className:"card"},
+      el("div",{className:"flabel"},"// GitHub Repository"),
+      el("div",{className:"irow"},inp,
+        el("button",{className:"sbtn",disabled:state.loading,onClick:fetchRepo},state.loading?"...":"Search →")
+      ),
+      el("p",{className:"hint"},"Try ",el("span",{},"aave/aave-v3-core"),", ",el("span",{},"solana-labs/solana"),", ",el("span",{},"matter-labs/zksync-era")),
+      el("div",{className:"trow"},
+        el("div",{className:"flabel"},"// GitHub Token ",el("span",{style:{color:"var(--t3)",fontSize:"9px"}},"(optional — raises rate limit 60 → 5,000/hr)")),
+        ti,
+        el("p",{className:"tnote"},"Never stored — sent only to GitHub's API. ",el("a",{href:"https://github.com/settings/tokens/new?scopes=read:user&description=RepoRecruit",target:"_blank"},"Generate one here →"))
+      )
+    );
+  } else {
+    const aiq = el("input",{type:"text",value:state.aiQuery,placeholder:'e.g. "Solidity DeFi developer" or "Rust L2 engineer"...',onInput:e=>setStateQuiet({aiQuery:e.target.value})});
+    aiq.addEventListener("keydown",e=>{ if(e.key==="Enter") aiSearch(); });
+    const ti2 = el("input",{type:"password",value:state.tokenInput,placeholder:"ghp_xxxxxxxxxxxx",onInput:e=>setStateQuiet({tokenInput:e.target.value})});
+    const presetDiv = el("div",{className:"presets"});
+    Object.keys(KB).slice(0,8).forEach(role => {
+      presetDiv.appendChild(el("button",{className:"preset",onClick:()=>{
+        setState({aiQuery:role});
+        const data=KB[role];
+        setState({aiSuggs:data.repos.slice(0,4).map(repo=>({repo,reason:data.reason,tags:data.tags}))});
+      }},role));
+    });
+    const suggDiv = state.aiSuggs.length>0 ? el("div",{className:"ai-sugg"},
+      el("div",{className:"ai-sugg-title"},"// Recommended repositories ("+state.aiSuggs.length+")"),
+      el("div",{className:"sgrid"},
+        ...state.aiSuggs.map(s=>el("div",{className:"scard",onClick:()=>{ setState({repoInput:s.repo,mode:"repo"}); setTimeout(fetchRepo,80); }},
+          el("div",{className:"srepo"},s.repo),
+          el("div",{className:"sreason"},s.reason),
+          el("div",{className:"stags"},...s.tags.map(t=>el("span",{className:"bdg bdg-lang"},t)))
+        ))
+      )
+    ) : null;
+    searchCard = el("div",{className:"card"},
+      el("div",{className:"flabel"},"// Describe the developer you're looking for"),
+      el("div",{className:"irow"},aiq,el("button",{className:"abtn",onClick:aiSearch},"Find Repos →")),
+      el("div",{className:"flabel",style:{marginTop:"14px",marginBottom:"8px"}},"// Quick role presets"),
+      presetDiv,
+      suggDiv,
+      el("div",{className:"trow"},
+        el("div",{className:"flabel"},"// GitHub Token"),
+        ti2,
+        el("p",{className:"tnote"},"Never stored. ",el("a",{href:"https://github.com/settings/tokens/new?scopes=read:user&description=RepoRecruit",target:"_blank"},"Generate one →"))
+      )
+    );
+  }
+
+  // COMPANIES TAB
+  let companiesCard = null;
+  if (state.mode==="companies" || state.mode==="company-results") {
+    // Filter companies
+    const csearch = state.companySearch.toLowerCase();
+    const cfiltered = COMPANIES.filter(c => {
+      if (csearch && !c.name.toLowerCase().includes(csearch) && !c.org.toLowerCase().includes(csearch)) return false;
+      if (state.companyFilter!=="All" && c.cat!==state.companyFilter) return false;
+      if (state.companyTagFilter!=="All" && !c.tags.includes(state.companyTagFilter)) return false;
+      return true;
+    });
+
+    // Search input
+    const csearchInp = el("input",{type:"text",value:state.companySearch,placeholder:"Search 252 companies — or type any GitHub org name...",onInput:e=>{ setStateQuiet({companySearch:e.target.value}); render(); }});
+
+    // Category filter pills
+    const catFilters = el("div",{className:"fbar",style:{marginTop:"12px"}},
+      el("button",{className:"fbtn"+(state.companyFilter==="All"?" on":""),onClick:()=>setState({companyFilter:"All"})},"All"),
+      ...CATEGORIES.slice(0,12).map(cat=>el("button",{className:"fbtn"+(state.companyFilter===cat?" on":""),onClick:()=>setState({companyFilter:cat})},cat))
+    );
+
+    // Tag filter
+    const tagFilters = el("div",{className:"fbar",style:{marginTop:"6px"}},
+      el("button",{className:"lfbtn"+(state.companyTagFilter==="All"?" on":""),onClick:()=>setState({companyTagFilter:"All"})},"All chains"),
+      ...["ETH","SOL","BTC","DOT","AVAX","Cosmos","L2","ZK","Multi"].map(t=>
+        el("button",{className:"lfbtn"+(state.companyTagFilter===t?" on":""),onClick:()=>setState({companyTagFilter:t})},t)
+      )
+    );
+
+    // Company grid
+    const cgrid = el("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:"9px",maxHeight:"420px",overflowY:"auto",marginTop:"14px",paddingRight:"4px"}});
+    cfiltered.slice(0,120).forEach(c => {
+      const isSelected = state.selectedCompany && state.selectedCompany.org===c.org;
+      cgrid.appendChild(el("div",{
+        className:"scard",
+        style:{borderColor: isSelected?"var(--a)":"",background:isSelected?"rgba(0,229,160,0.07)":""},
+        onClick:()=>{ setState({selectedCompany:c, companyRepos:[], selectedRepos:[]}); fetchCompanyRepos(c.org); }
+      },
+        el("div",{className:"srepo"},c.name),
+        el("div",{style:{display:"flex",gap:"4px",flexWrap:"wrap",marginTop:"5px"}},
+          el("span",{className:"bdg bdg-lang",style:{fontSize:"8px"}},c.cat),
+          ...c.tags.filter(t=>t!=="Multi").slice(0,2).map(t=>el("span",{className:"bdg bdg-eth",style:{fontSize:"8px"}},t))
+        ),
+        el("div",{className:"sreason",style:{marginTop:"5px",fontSize:"9px"}},c.org)
+      ));
+    });
+    if (cfiltered.length>120) cgrid.appendChild(el("div",{style:{gridColumn:"1/-1",textAlign:"center",padding:"12px",fontSize:"11px",color:"var(--t3)"}},"Showing first 120 of "+cfiltered.length+" — refine your search"));
+
+    // Right panel: repo selector
+    let repoPanel = null;
+    if (state.selectedCompany) {
+      const co = state.selectedCompany;
+      let repoList;
+      if (state.companyRepos.length===0) {
+        repoList = el("div",{style:{padding:"20px 0",textAlign:"center"}},
+          el("div",{className:"lbar"},el("div",{className:"lfill"})),
+          el("p",{className:"ltext"},"Loading repos for "+co.name+"...")
+        );
+      } else {
+        repoList = el("div",{style:{display:"flex",flexDirection:"column",gap:"7px",maxHeight:"340px",overflowY:"auto"}},
+          ...state.companyRepos.slice(0,50).map(r => {
+            const isSel = state.selectedRepos.some(s=>s.full_name===r.full_name);
+            return el("div",{
+              style:{display:"flex",alignItems:"center",gap:"10px",background:isSel?"rgba(0,229,160,0.07)":"var(--bg)",border:"1px solid "+(isSel?"var(--a)":"var(--b1)"),borderRadius:"5px",padding:"9px 12px",cursor:"pointer",transition:"all 0.15s"},
+              onClick:()=>toggleRepoSelection(r)
+            },
+              el("div",{style:{width:"16px",height:"16px",borderRadius:"3px",border:"1px solid "+(isSel?"var(--a)":"var(--t3)"),background:isSel?"var(--a)":"transparent",flexShrink:"0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"10px",color:"#050709"}},isSel?"✓":""),
+              el("div",{style:{flex:"1",minWidth:"0"}},
+                el("div",{style:{fontSize:"12px",color:"var(--t)",fontWeight:"500",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},r.name),
+                el("div",{style:{fontSize:"10px",color:"var(--t3)",marginTop:"2px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},r.description||"No description")
+              ),
+              el("div",{style:{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:"3px",flexShrink:"0"}},
+                el("span",{style:{fontSize:"10px",color:"var(--t2)"}},"⭐ "+r.stargazers_count),
+                r.language?el("span",{className:"bdg bdg-lang",style:{fontSize:"8px"}},r.language):null
+              )
+            );
+          })
+        );
+      }
+
+      const searchBtn2 = state.selectedRepos.length>0 ? el("button",{
+        className:"sbtn",style:{width:"100%",marginTop:"12px"},
+        disabled:state.multiLoading,
+        onClick:fetchSelectedReposContributors
+      },state.multiLoading?state.multiLoadText:"Search "+state.selectedRepos.length+" Selected Repo"+(state.selectedRepos.length>1?"s":"")+" →") : null;
+
+      repoPanel = el("div",{style:{background:"var(--bg)",border:"1px solid var(--b2)",borderRadius:"8px",padding:"16px"}},
+        el("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"12px"}},
+          el("div",{},
+            el("div",{className:"flabel"},"// "+co.name+" Repositories"),
+            el("div",{style:{fontSize:"11px",color:"var(--t3)",marginTop:"2px"}},"Select repos to source candidates from")
+          ),
+          state.selectedRepos.length>0?el("span",{className:"cpill"},state.selectedRepos.length+" selected"):null
+        ),
+        repoList,
+        searchBtn2,
+        state.multiLoading?el("div",{style:{marginTop:"10px"}},el("div",{className:"lbar"},el("div",{className:"lfill"})),el("p",{className:"ltext",style:{textAlign:"center"}},state.multiLoadText)):null
+      );
+    }
+
+    // Token warning for companies tab
+    // Show token debug info on error
+  const tokenDebug = state.error ? el("div",{style:{
+    background:"rgba(0,0,0,0.3)",border:"1px solid var(--b2)",borderRadius:"5px",
+    padding:"10px 14px",marginBottom:"10px",fontSize:"10px",color:"var(--t3)",fontFamily:"'JetBrains Mono',monospace"
+  }},
+    "Token in sessionStorage: "+(sessionStorage.getItem("rr_token") ? "YES ("+sessionStorage.getItem("rr_token").slice(0,8)+"...)" : "NONE"),
+    el("br",{}),
+    "Token in state: "+(state.tokenInput.trim() ? "YES ("+state.tokenInput.trim().slice(0,8)+"...)" : "NONE")
+  ) : null;
+
+  const tokenWarning = !state.tokenInput.trim() && !sessionStorage.getItem("rr_token") ? el("div",{style:{    background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.25)",
+      borderRadius:"6px",padding:"12px 16px",marginBottom:"16px",fontSize:"11px",color:"var(--a3)",
+      display:"flex",alignItems:"flex-start",gap:"10px"
+    }},
+      el("span",{style:{fontSize:"16px",flexShrink:"0"}},"⚠"),
+      el("div",{},
+        el("strong",{},"GitHub Token required for the Companies tab. "),
+        "Without one, GitHub will block requests after ~5 clicks. ",
+        el("a",{href:"https://github.com/settings/tokens/new?scopes=read:user&description=RepoRecruit",target:"_blank",style:{color:"var(--a2)"}},"Generate a free token here →"),
+        " then paste it in the token field below.",
+        el("div",{style:{marginTop:"10px",display:"flex",gap:"8px"}},
+          el("input",{type:"password",id:"token-inline-input",placeholder:"ghp_xxxxxxxxxxxx — paste token here",
+            style:{flex:"1",background:"var(--bg)",border:"1px solid var(--b2)",borderRadius:"4px",color:"var(--t)",fontFamily:"'JetBrains Mono',monospace",fontSize:"12px",padding:"8px 12px",outline:"none"}
+          }),
+          el("button",{
+            style:{background:"var(--a)",border:"none",borderRadius:"4px",color:"#050709",cursor:"pointer",fontFamily:"'JetBrains Mono',monospace",fontSize:"10px",fontWeight:"700",padding:"8px 16px",whiteSpace:"nowrap",letterSpacing:"1px"},
+            onClick:()=>{
+              const inp = document.getElementById("token-inline-input");
+              const t = (inp ? inp.value : "").trim();
+              if (!t) return;
+              sessionStorage.setItem("rr_token", t);
+              setState({tokenInput:t, tokenSaved:true});
+            }
+          },"Save Token ✓")
+        )
+      )
+    ) : null;
+
+    const layout = el("div",{style:{display:"grid",gridTemplateColumns:state.selectedCompany?"1fr 1fr":"1fr",gap:"20px",alignItems:"start"}});
+    const leftCol = el("div",{},
+      el("div",{className:"irow"},csearchInp),
+      catFilters,
+      tagFilters,
+      el("div",{style:{fontSize:"10px",color:"var(--t3)",marginTop:"8px",marginBottom:"4px"}},"Showing "+Math.min(120,cfiltered.length)+" of "+cfiltered.length+" companies — click any to browse their repos"),
+      cgrid
+    );
+    layout.appendChild(leftCol);
+    if (repoPanel) layout.appendChild(repoPanel);
+
+    companiesCard = el("div",{className:"card",style:{maxWidth:"none"}},tokenDebug,tokenWarning,layout);
+    if (!searchCard || state.mode==="companies" || state.mode==="company-results") searchCard = companiesCard;
+  }
+
+
+  // ERROR
+  const errDiv = state.error ? el("div",{className:"erbox"},"⚠ "+state.error) : null;
+
+  // LOADER
+  const loaderDiv = state.loading ? el("div",{className:"loader"},
+    el("div",{className:"lbar"},el("div",{className:"lfill"})),
+    el("p",{className:"ltext"},state.loadingText),
+    state.loadingSub ? el("p",{className:"lsub"},state.loadingSub) : null
+  ) : null;
+
+  // RESULTS
+  let resultsDiv = null;
+  if (state.contributors.length>0&&!state.loading) {
+    const repoBanner = state.repoInfo ? el("div",{className:"rbanner"},
+      el("div",{},
+        el("div",{className:"flabel"},"// Repository"),
+        el("div",{className:"rtitle"},state.repoInfo.full_name),
+        state.repoInfo.description?el("div",{className:"rdesc"},state.repoInfo.description):null
+      ),
+      el("div",{className:"rstat"},"⭐ "+(state.repoInfo.stargazers_count||0).toLocaleString()),
+      el("div",{className:"rstat"},"🍴 "+(state.repoInfo.forks_count||0).toLocaleString()),
+      state.repoInfo.language?el("div",{className:"rstat"},"{ } "+state.repoInfo.language):null,
+      el("a",{className:"libtn",style:{fontSize:"11px",padding:"6px 14px"},href:state.repoInfo.html_url,target:"_blank"},"GitHub ↗")
+    ) : null;
+
+    const statsBar = el("div",{className:"sbar"},
+      el("div",{className:"stat"},el("div",{className:"snum",style:{color:"var(--t)"}},state.contributors.length),el("div",{className:"slabel"},"Contributors")),
+      el("div",{className:"stat"},el("div",{className:"snum",style:{color:"var(--a)"}},withEmail),el("div",{className:"slabel"},"Public Emails")),
+      el("div",{className:"stat"},el("div",{className:"snum",style:{color:"var(--a2)"}},activeDevs),el("div",{className:"slabel"},"Active 90d")),
+      el("div",{className:"stat"},el("div",{className:"snum",style:{color:"var(--pur)"}},web3Devs),el("div",{className:"slabel"},"Web3 Signals")),
+      el("div",{className:"stat"},el("div",{className:"snum",style:{color:"var(--a3)"}},savedCount),el("div",{className:"slabel"},"Saved"))
+    );
+
+    const sf = el("input",{type:"text",className:"sfilter",value:state.textFilter,placeholder:"Filter by name, location...",onInput:e=>{
+  setStateQuiet({textFilter:e.target.value});
+  const pos=e.target.selectionStart;
+  render();
+  const el2=document.querySelector(".sfilter");
+  if(el2){el2.focus();try{el2.setSelectionRange(pos,pos);}catch(x){}}
+}});
+    const rhead = el("div",{className:"rheader"},
+      el("div",{className:"rmeta"},el("h2",{className:"rtitle2"},"Contributors"),el("span",{className:"cpill"},filtered.length)),
+      el("div",{className:"bgroup"},sf,
+        el("button",{className:"obtn",onClick:()=>{
+          const rows=[["Name","Handle","GitHub URL","Email","Location","Company","Commits","Score","Badges","LinkedIn"],
+            ...filtered.map(c=>[c.name||c.login,"@"+c.login,c.html_url,c.email||"",c.location||"",c.company||"",c.contributions,calcScore(c),c.badges.map(b=>b.label).join(", "),liUrl(c)]).map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(","))];
+          dlFile("repocruit-export.csv",rows.join("\n"),"text/csv");
+        }},"Export CSV")
+      )
+    );
+
+    const fbar = el("div",{className:"fbar"},
+      ...[["all","All"],["email","Has Email"],["active","Active 90d"],["saved","Saved"]].map(([v,l])=>
+        el("button",{className:"fbtn"+(state.filter===v?" on":""),onClick:()=>setState({filter:v})},l)
+      ),
+      allLangs.length>0?el("div",{className:"fsep"}):null,
+      ...allLangs.map(lang=>el("button",{className:"lfbtn"+(state.langFilter===lang?" on":""),onClick:()=>setState({langFilter:state.langFilter===lang?"all":lang})},lang))
+    );
+
+    const tbody = el("tbody",{});
+    filtered.forEach(c => {
+      const score=calcScore(c), act=actInfo(c), sv=!!state.saved[c.login];
+      const tr=el("tr",{},
+        el("td",{},el("div",{className:"avcell"},
+          el("img",{className:"av",src:c.avatar_url,alt:c.login,loading:"lazy",onClick:()=>openProfile(c)}),
+          el("div",{},
+            el("div",{className:"ntext",onClick:()=>openProfile(c)},c.name||c.login),
+            c.company?el("div",{className:"stext"},c.company):null,
+            state.notes[c.login]?el("div",{className:"stext",style:{color:"var(--a3)"}},"📝 "+state.notes[c.login].slice(0,28)+(state.notes[c.login].length>28?"...":"")):null
+          )
+        )),
+        el("td",{},el("a",{className:"hlink",href:c.html_url,target:"_blank"},"@"+c.login)),
+        el("td",{},c.repos&&c.repos.length ? el("div",{style:{display:"flex",flexDirection:"column",gap:"3px"}},
+          ...c.repos.slice(0,2).map(r=>el("div",{style:{fontSize:"9px",color:"var(--a2)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:"140px"}},r)),
+          c.repos.length>2?el("div",{style:{fontSize:"9px",color:"var(--t3)"}},"+"+( c.repos.length-2)+" more"):null
+        ) : el("span",{className:"noval"},"—")),
+        el("td",{},el("div",{className:"bdgcell"},...(c.badges.length?c.badges.slice(0,4).map(bdg):[el("span",{className:"noval"},"—")]))),
+        el("td",{},el("div",{className:"score-wrap"},
+          el("div",{className:"score-row"},
+            el("span",{className:"score-n",style:{color:scoreColor(score)}},score),
+            el("div",{className:"score-bar"},el("div",{className:"score-fill",style:{width:score+"%",background:scoreColor(score)}}))
+          ),
+          el("div",{className:"score-lbl"},score>=70?"High":score>=40?"Mid":"Low")
+        )),
+        el("td",{},el("span",{className:"adot "+act.cls}),el("span",{className:"atext",style:{color:act.col}},act.txt)),
+        el("td",{},c.email?el("a",{className:"elink",href:"mailto:"+c.email},c.email):el("span",{className:"noval"},"—")),
+        el("td",{},el("span",{style:{fontSize:"11px",color:"var(--t2)"}},c.location||el("span",{className:"noval"},"—"))),
+        el("td",{},el("a",{className:"libtn",href:liUrl(c),target:"_blank"},"Search ↗")),
+        el("td",{},el("button",{className:"svbtn"+(sv?" on":""),onClick:()=>{
+          const s={...state.saved};
+          if(s[c.login])delete s[c.login]; else s[c.login]={login:c.login,name:c.name,avatar_url:c.avatar_url,html_url:c.html_url};
+          setState({saved:s});
+        }},sv?"★":"☆"))
+      );
+      tbody.appendChild(tr);
+    });
+
+    const table = el("div",{className:"twrap"},el("table",{},
+      el("thead",{},el("tr",{},
+        ...["Contributor","Handle","Source","Web3 Signals","Score","Activity","Email","Location","LinkedIn","Save"].map(h=>el("th",{},h))
+      )),
+      tbody
+    ));
+
+    resultsDiv = el("div",{},repoBanner,statsBar,rhead,fbar,table);
+  }
+
+  // PROFILE DRAWER
+  let profileDrawer = null;
+  if (state.profileOpen) {
+    const c = state.profileOpen;
+    const score = calcScore(c);
+    const act = actInfo(c);
+    const pRepos = state.profileRepos[c.login]||[];
+
+    const toneRow = el("div",{className:"tone-row"},
+      ...[["direct","Direct"],["brief","Brief"],["story","Story-led"]].map(([v,l])=>
+        el("button",{className:"tbtn"+(state.outreachTone===v?" on":""),onClick:()=>setState({outreachTone:v})},l)
+      ),
+      el("button",{className:"genbtn",onClick:()=>{
+        const msg=generateOutreach(c,state.outreachTone,state.repoInfo);
+        setState({outreachMsg:msg,outreachCopied:false});
+      }},"Generate ✦")
+    );
+
+    const msgArea = state.outreachMsg ? el("div",{className:"omsg-wrap"},
+      el("textarea",{className:"omsg",readOnly:true,value:state.outreachMsg}),
+      el("button",{className:"copybtn"+(state.outreachCopied?" done":""),onClick:copyOutreach},state.outreachCopied?"✓ Copied!":"Copy"),
+      el("p",{className:"onote"},"Personalised using "+(c.name||c.login)+"'s web3 signals, commit count & activity. Replace [Your name] before sending.")
+    ) : null;
+
+    const repoCds = pRepos.length ? el("div",{className:"rcards"},
+      ...pRepos.slice(0,6).map(r=>el("a",{className:"rcard",href:r.html_url,target:"_blank"},
+        el("div",{className:"rcard-name"},r.name),
+        el("div",{className:"rcard-desc"},r.description||"No description"),
+        el("div",{className:"rcard-meta"},"⭐ "+r.stargazers_count,r.language?" · "+r.language:"")
+      ))
+    ) : el("p",{style:{fontSize:"11px",color:"var(--t3)"}},"Loading repos...");
+
+    profileDrawer = el("div",{className:"overlay",onClick:e=>{ if(e.target===e.currentTarget)setState({profileOpen:null}); }},
+      el("div",{className:"drawer"},
+        el("div",{className:"dhead"},el("div",{className:"dtitle"},"Profile"),el("button",{className:"cbtn",onClick:()=>setState({profileOpen:null})},"✕")),
+        el("div",{className:"ptop"},
+          el("img",{className:"pav",src:c.avatar_url,alt:c.login}),
+          el("div",{},
+            el("div",{className:"pname"},c.name||c.login),
+            el("div",{className:"phandle"},el("a",{className:"hlink",href:c.html_url,target:"_blank"},"@"+c.login)),
+            c.bio?el("div",{className:"pbio"},c.bio):null,
+            el("div",{className:"pmeta"},
+              c.location?el("span",{className:"pmi"},"📍 "+c.location):null,
+              c.company?el("span",{className:"pmi"},"🏢 "+c.company):null,
+              c.email?el("span",{className:"pmi"},"✉ "+c.email):null,
+              el("span",{className:"pmi"},"📦 "+(c.publicRepos||0)+" repos"),
+              el("span",{className:"pmi"},"⚡ "+(c.contributions||0).toLocaleString()+" commits")
+            )
+          )
+        ),
+        c.badges&&c.badges.length?el("div",{className:"psec"},el("div",{className:"psect"},"Web3 Signals"),el("div",{style:{display:"flex",flexWrap:"wrap",gap:"6px"}},...c.badges.map(b=>el("span",{className:"bdg "+b.cls,style:{fontSize:"11px",padding:"5px 10px"}},b.label)))):null,
+        el("div",{className:"psec"},
+          el("div",{className:"psect"},"Activity Score"),
+          el("div",{style:{display:"flex",alignItems:"center",gap:"16px"}},
+            el("span",{style:{fontFamily:"'DM Serif Display',serif",fontSize:"46px",color:scoreColor(score)}},score),
+            el("div",{},
+              el("div",{style:{fontSize:"11px",color:"var(--t2)",marginBottom:"6px"}},"Based on recency, commit volume & repo diversity"),
+              el("div",{style:{display:"flex",gap:"10px",fontSize:"10px",color:"var(--t3)"}},
+                el("span",{},"⚡ "+(c.contributions||0)+" commits to this repo"),
+                c.daysSince?el("span",{},"🕐 Last active "+Math.round(c.daysSince)+"d ago"):null
+              )
+            )
+          )
+        ),
+        el("div",{className:"psec"},el("div",{className:"psect"},"Top Repositories"),repoCds),
+        el("div",{className:"psec"},
+          el("div",{className:"psect"},"✦ Chainlink Labs Outreach Message"),
+          toneRow,
+          msgArea
+        ),
+        el("div",{className:"psec"},
+          el("div",{className:"psect"},"Recruiter Notes"),
+          el("textarea",{className:"narea",placeholder:"Interview stage, fit assessment, follow-up date...",value:state.noteText,onInput:e=>setStateQuiet({noteText:e.target.value})}),
+          el("button",{className:"nsave",onClick:()=>setState({notes:{...state.notes,[c.login]:state.noteText}})},"Save Note")
+        ),
+        el("div",{style:{display:"flex",gap:"10px",marginTop:"4px",flexWrap:"wrap"}},
+          el("a",{className:"libtn",style:{fontSize:"11px",padding:"8px 15px"},href:liUrl(c),target:"_blank"},"Search LinkedIn ↗"),
+          el("a",{className:"libtn",style:{fontSize:"11px",padding:"8px 15px"},href:c.html_url,target:"_blank"},"GitHub Profile ↗"),
+          el("button",{className:"svbtn"+(state.saved[c.login]?" on":""),style:{fontSize:"15px",padding:"6px 14px"},onClick:()=>{
+            const s={...state.saved};
+            if(s[c.login])delete s[c.login]; else s[c.login]={login:c.login,name:c.name,avatar_url:c.avatar_url,html_url:c.html_url};
+            setState({saved:s});
+          }},state.saved[c.login]?"★ Saved":"☆ Save")
+        )
+      )
+    );
+  }
+
+  // TOKEN MODAL
+  let tokenModal = null;
+  if (state.showTokenModal) {
+    const tinp = el("input",{type:"password",value:state.tokenInput,
+      placeholder:"ghp_xxxxxxxxxxxx",
+      style:{width:"100%",background:"var(--bg)",border:"1px solid var(--b2)",borderRadius:"5px",color:"var(--t)",fontFamily:"'JetBrains Mono',monospace",fontSize:"13px",padding:"11px 14px",outline:"none",marginBottom:"12px"},
+      onInput:e=>setStateQuiet({tokenInput:e.target.value})
+    });
+    tinp.addEventListener("keydown", e=>{ if(e.key==="Enter") saveToken(); });
+    function saveToken() {
+      const t = state.tokenInput.trim();
+      if (!t) { alert("Please paste your token first."); return; }
+      sessionStorage.setItem("rr_token", t);
+      setState({tokenInput:t, tokenSaved:true, showTokenModal:false});
+    }
+    tokenModal = el("div",{className:"overlay",onClick:e=>{ if(e.target===e.currentTarget) setState({showTokenModal:false}); }},
+      el("div",{style:{background:"var(--s1)",border:"1px solid var(--b2)",borderRadius:"12px",width:"100%",maxWidth:"500px",padding:"28px",margin:"auto",animation:"sdup .3s ease"}},
+        el("div",{className:"dhead"},
+          el("div",{className:"dtitle"},"GitHub Token"),
+          el("button",{className:"cbtn",onClick:()=>setState({showTokenModal:false})},"✕")
+        ),
+        el("p",{style:{fontSize:"12px",color:"var(--t2)",marginBottom:"16px",lineHeight:"1.7"}},
+          "A Personal Access Token lets you make 5,000 API requests/hour instead of 60. It's required for the Companies tab and recommended for all searches."
+        ),
+        el("div",{style:{background:"var(--s2)",border:"1px solid var(--b1)",borderRadius:"6px",padding:"12px 14px",marginBottom:"16px",fontSize:"11px",color:"var(--t3)",lineHeight:"1.7"}},
+          "1. Go to ",el("a",{href:"https://github.com/settings/tokens/new?scopes=read:user&description=RepoRecruit",target:"_blank",style:{color:"var(--a2)"}},"github.com/settings/tokens/new"),el("br",{}),
+          "2. Set any name (e.g. RepoRecruit)",el("br",{}),
+          "3. Set expiry (90 days recommended)",el("br",{}),
+          "4. Tick ",el("strong",{style:{color:"var(--t)"}},"read:user")," scope only",el("br",{}),
+          "5. Click Generate and paste below"
+        ),
+        tinp,
+        el("div",{style:{display:"flex",gap:"10px"}},
+          el("button",{className:"sbtn",style:{flex:"1"},onClick:saveToken},"Save Token ✓"),
+          el("button",{className:"obtn",onClick:()=>setState({showTokenModal:false})},"Cancel")
+        ),
+        el("p",{style:{fontSize:"10px",color:"var(--t3)",marginTop:"10px",textAlign:"center"}},"Saved for this browser session only. Never sent anywhere except GitHub's API.")
+      )
+    );
+  }
+
+  // SAVED DRAWER
+  let savedDrawer = null;
+  if (state.showSaved) {
+    const svList = Object.values(state.saved);
+    savedDrawer = el("div",{className:"overlay",onClick:e=>{ if(e.target===e.currentTarget)setState({showSaved:false}); }},
+      el("div",{className:"drawer"},
+        el("div",{className:"dhead"},el("div",{className:"dtitle"},"Saved Candidates ("+svList.length+")"),el("button",{className:"cbtn",onClick:()=>setState({showSaved:false})},"✕")),
+        svList.length===0 ? el("div",{className:"empty"},"No saved candidates yet.",el("br",{}),"Click ☆ on any row to save.") :
+        el("div",{className:"spanel"},
+          ...svList.map(c=>el("div",{className:"svc"},
+            el("img",{className:"av",src:c.avatar_url,alt:c.login,style:{width:"38px",height:"38px",cursor:"default"}}),
+            el("div",{className:"svc-info"},
+              el("div",{className:"svc-name"},c.name||c.login),
+              el("a",{className:"svc-handle hlink",href:c.html_url,target:"_blank"},"@"+c.login),
+              state.notes[c.login]?el("div",{className:"svc-note"},"📝 "+state.notes[c.login]):null
+            ),
+            el("button",{className:"unsave",onClick:()=>{
+              const s={...state.saved};delete s[c.login];setState({saved:s});
+            }},"✕")
+          ))
+        )
+      )
+    );
+  }
+
+  const footer = el("footer",{},el("div",{className:"wrap"},"RepoRecruit — Web3 Talent Intelligence · GitHub API · Built for Chainlink Labs recruiting"));
+
+  const main = el("div",{className:"wrap"},hero,modeToggle,searchCard,errDiv,loaderDiv,resultsDiv);
+  app.appendChild(header);
+  app.appendChild(main);
+  app.appendChild(footer);
+  if (profileDrawer) app.appendChild(profileDrawer);
+  if (savedDrawer) app.appendChild(savedDrawer);
+  if (tokenModal) app.appendChild(tokenModal);
+}
+
+render();
+</script>
+</body>
+</html>
